@@ -13,42 +13,43 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /***
  * errorCode: 2000~2999
+ * 사용가능 : 2008 ~
  */
 
 @Slf4j
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
-    @ExceptionHandler
-    public ResponseEntity runtimeExHandle(RuntimeException ex) {
-        log.error("Exception Name = {}, Message = {}", ex.getClass().getName(), ex.getMessage());
-        return ResponseEntity.ok()
-                .body(CommonResponse.builder().errorCode(2000).build());
-    }
+//    @ExceptionHandler
+//    public ResponseEntity runtimeExHandle(RuntimeException ex) {
+//        log.error("Exception Name = {}, Code = 2000, Message = {}", ex.getClass().getName(), ex.getMessage());
+//        return ResponseEntity.ok()
+//                .body(CommonResponse.builder().errorCode(2000).build());
+//    }
 
     @ExceptionHandler
     public ResponseEntity accessDeniedExHandle(AccessDeniedException ex) {
-        log.warn("Exception Name = {}, Message = {}", ex.getClass().getName(), ex.getMessage());
+        log.warn("Exception Name = {}, Code = 2001, Message = {}", ex.getClass().getName(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(CommonResponse.builder().errorCode(2001).build());
     }
 
     @ExceptionHandler
     public ResponseEntity methodNotAllowedExHandle(HttpRequestMethodNotSupportedException ex) {
-        log.warn("Exception Name = {}, Message = {}", ex.getClass().getName(), ex.getMessage());
+        log.warn("Exception Name = {}, Code = 2002, Message = {}", ex.getClass().getName(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(CommonResponse.builder().errorCode(2002).build());
     }
 
     @ExceptionHandler
     public ResponseEntity illegalArgumentExceptionExHandle(IllegalArgumentException ex) {
-        log.warn("Exception Name = {}, Message = {}", ex.getClass().getName(), ex.getMessage());
+        log.warn("Exception Name = {}, Code = 2003, Message = {}", ex.getClass().getName(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.builder().errorCode(2003).build());
     }
 
     @ExceptionHandler
     public ResponseEntity constraintViolationExceptionExceptionExHandle(ConstraintViolationException ex) {
-        log.warn("Exception Name = {}, Message = {}", ex.getClass().getName(), ex.getMessage());
+        log.warn("Exception Name = {}, Code = 2004, Message = {}", ex.getClass().getName(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.builder().errorCode(2004).build());
     }

@@ -4,9 +4,9 @@ import noctem.userService.global.common.CommonException;
 import org.springframework.http.HttpStatus;
 
 public enum Grade {
-    TALL("TALL"),
-    GRANDE("GRANDE"),
-    VENTI("VENTI");
+    TALL("Tall"),
+    GRANDE("Grande"),
+    VENTI("Venti");
 
     private String value;
 
@@ -20,11 +20,11 @@ public enum Grade {
 
     public Grade findInstance(String str) {
         switch (str.strip()) {
-            case "TALL":
+            case "Tall":
                 return Grade.TALL;
-            case "GRANDE":
+            case "Grande":
                 return Grade.GRANDE;
-            case "VENTI":
+            case "Venti":
                 return Grade.VENTI;
             default:
                 throw CommonException.builder().errorCode(2005).httpStatus(HttpStatus.BAD_REQUEST).build();

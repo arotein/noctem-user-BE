@@ -11,22 +11,22 @@ spring:
   application:
     name: user-service
   config:
-    import: optional:configserver:http://${HOST_SERVER}:8888
+    import: optional:configserver:http://${CONFIG_SERVER}:8888
   profiles:
     active: ${PROFILE}
   cloud:
     config:
-      fail-fast: false # true: config 서버에 연결하지 못하면 앱이 실행되지 않도록 함
+      fail-fast: true # true: config 서버에 연결하지 못하면 앱이 실행되지 않도록 함
     bus:
       enabled: true
       refresh:
         enabled: true
       destination: config-topic
   kafka:
-    bootstrap-servers: http://${HOST_SERVER}:9092 # 카프카 클러스터 주소
+    bootstrap-servers: http://${KAFKA_SERVER}:9092 # 카프카 클러스터 주소
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${HOST_SERVER}:3307/user?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://${MYSQL_SERVER}:3307/user?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ${NOCTEM_DB_USERNAME}
     password: ${NOCTEM_DB_PASSWORD}
   jpa:
@@ -45,7 +45,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://${HOST_SERVER}:8761/eureka
+      defaultZone: http://${EUREKA_SERVER}:8761/eureka
 
 management:
   endpoints:

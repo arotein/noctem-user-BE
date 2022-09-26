@@ -1,0 +1,45 @@
+package noctem.userService.domain.user.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import noctem.userService.global.common.BaseEntity;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Cart extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
+    private Long id;
+    private Long sizeId;
+    private Integer amount;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MyPersonalOption> myPersonalOptionList = new ArrayList<>();
+
+
+    public Cart linkToUser(User user) {
+        this.user = user;
+        user.linkToCart(this);
+        return this;
+    }
+
+    public Cart linkToMyPersonalOption(List<MyPersonalOption> myPersonalOptionList) {
+        this.myPersonalOptionList.addAll(myPersonalOptionList);
+        myPersonalOptionList.forEach(e -> e.linkToCart(this));
+        return this;
+    }
+}
