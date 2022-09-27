@@ -2,6 +2,7 @@ package noctem.userService.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import noctem.userService.global.common.BaseEntity;
@@ -30,6 +31,11 @@ public class Cart extends BaseEntity {
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MyPersonalOption> myPersonalOptionList = new ArrayList<>();
 
+    @Builder
+    public Cart(Long sizeId, Integer amount) {
+        this.sizeId = sizeId;
+        this.amount = amount;
+    }
 
     public Cart linkToUser(User user) {
         this.user = user;

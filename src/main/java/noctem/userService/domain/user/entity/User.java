@@ -2,6 +2,7 @@ package noctem.userService.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import noctem.userService.global.common.BaseEntity;
@@ -36,9 +37,9 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Grade grade = Grade.TALL;
-    private Integer gradeExp;
+    private Integer gradeExp = 0;
 
-    private Boolean isDarkmode;
+    private Boolean isDarkmode = false;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
@@ -50,6 +51,17 @@ public class User extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Cart> cartList = new ArrayList<>();
+
+    @Builder
+    public User(String loginId, String password, String name, String nickname, LocalDate dateOfBirth, String email, String phoneNumber) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 
     public void updateLastAccessTime() {
         this.lastAccessTime = new Timestamp(System.currentTimeMillis());

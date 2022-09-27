@@ -26,7 +26,7 @@ spring:
     bootstrap-servers: http://${KAFKA_SERVER}:9092 # 카프카 클러스터 주소
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_SERVER}:3307/user?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://${MYSQL_SERVER}:3306/user?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: ${NOCTEM_DB_USERNAME}
     password: ${NOCTEM_DB_PASSWORD}
   jpa:
@@ -52,7 +52,7 @@ management:
     web:
       base-path: /api/user-service/actuator
       exposure:
-        include: health, refresh, beans, httptrace, busrefresh, prometheus, metrics
+        include: health, refresh, httptrace, busrefresh, prometheus, metrics
   metrics:
     export:
       prometheus:

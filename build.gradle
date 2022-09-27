@@ -15,7 +15,7 @@ jib {
     }
     to {
         image = System.getenv("DOCKERHUB_IMG_USER")
-        tags = ['latest']
+        tags = [System.getenv("PROFILE")]
         auth {
             username = System.getenv("DOCKERHUB_ID")
             password = System.getenv("DOCKERHUB_PW")

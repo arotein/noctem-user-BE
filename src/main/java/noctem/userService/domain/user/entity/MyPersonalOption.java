@@ -2,6 +2,7 @@ package noctem.userService.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import noctem.userService.global.common.BaseEntity;
@@ -28,6 +29,12 @@ public class MyPersonalOption extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "my_menu_id")
     private MyMenu myMenu;
+
+    @Builder
+    public MyPersonalOption(Long personalOptionId, Integer amount) {
+        this.personalOptionId = personalOptionId;
+        this.amount = amount;
+    }
 
     public MyPersonalOption linkToMyMenu(MyMenu myMenu) {
         this.myMenu = myMenu;
