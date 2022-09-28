@@ -10,6 +10,7 @@ import noctem.userService.domain.user.entity.UserPrivacy;
 import noctem.userService.domain.user.repository.UserRepository;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Sex;
+import noctem.userService.global.security.bean.ClientInfoLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ClientInfoLoader clientInfoLoader;
 
     @Override
     public Boolean signUp(SignUpReqDto dto) {
@@ -81,13 +83,33 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Boolean duplCheckEmail(String email) {
         return userRepository.existEmail(email);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Boolean duplCheckNickname(String nickname) {
         return userRepository.existNickname(nickname);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean isDarkmode() {
+        return userRepository.isDarkmode(clientInfoLoader.getUserAccountId());
+    }
+
+    @Override
+    public Boolean changeDarkmode() {
+        OptionalInfo optionalInfo = userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId());
+        optionalInfo.changeDarkmode();
+        return true;
+    }
+
+    @Override
+    public void updateLastAccessTime(Long userAccountId) {
+        userRepository.updateLastAccessTime(userAccountId);
     }
 }

@@ -3,6 +3,7 @@ package noctem.userService.global.exception;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.common.CommonResponse;
+import noctem.userService.global.common.SecurityCustomException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /***
  * errorCode: 2000~2999
- * 사용가능 : 2015 ~
+ * 사용가능 : 2019 ~
  */
 
 @Slf4j
@@ -56,6 +57,13 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     public ResponseEntity commonExHandle(CommonException ex) {
+        log.warn("Exception Name = {}, Code = {}, Message = {}", ex.getClass().getName(), ex.getErrorCode(), ex.getMessage());
+        return ResponseEntity.status(ex.getHttpStatus())
+                .body(CommonResponse.builder().errorCode(ex.getErrorCode()).build());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity securityCustomExHandle(SecurityCustomException ex) {
         log.warn("Exception Name = {}, Code = {}, Message = {}", ex.getClass().getName(), ex.getErrorCode(), ex.getMessage());
         return ResponseEntity.status(ex.getHttpStatus())
                 .body(CommonResponse.builder().errorCode(ex.getErrorCode()).build());

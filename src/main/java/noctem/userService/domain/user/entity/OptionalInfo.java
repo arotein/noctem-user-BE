@@ -43,4 +43,9 @@ public class OptionalInfo extends BaseEntity {
         this.userAccount = userAccount;
         return this;
     }
+
+    public OptionalInfo changeDarkmode() {
+        this.isDarkmode = this.isDarkmode ? false : true;
+        return this;
+    }
 }

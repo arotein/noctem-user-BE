@@ -1,9 +1,10 @@
 package noctem.userService.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import noctem.userService.domain.user.dto.request.*;
+import noctem.userService.domain.user.dto.request.SignUpReqDto;
 import noctem.userService.domain.user.service.UserService;
 import noctem.userService.global.common.CommonResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,22 @@ public class UserController {
     public CommonResponse duplCheckNickname(@PathVariable String nickname) {
         return CommonResponse.builder()
                 .data(userService.duplCheckNickname(nickname))
+                .build();
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/optionalInfo/darkmode")
+    public CommonResponse isDarkmode() {
+        return CommonResponse.builder()
+                .data(userService.isDarkmode())
+                .build();
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/optionalInfo/darkmode")
+    public CommonResponse changeDarkmode() {
+        return CommonResponse.builder()
+                .data(userService.changeDarkmode())
                 .build();
     }
 }

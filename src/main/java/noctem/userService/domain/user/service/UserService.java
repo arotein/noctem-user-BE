@@ -8,4 +8,10 @@ public interface UserService {
     Boolean duplCheckEmail(String email);
 
     Boolean duplCheckNickname(String nickname);
+
+    Boolean isDarkmode();
+
+    Boolean changeDarkmode();
+
+    void updateLastAccessTime(Long id);
 }

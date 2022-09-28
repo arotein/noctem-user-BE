@@ -1,10 +1,7 @@
 package noctem.userService.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import noctem.userService.global.common.BaseEntity;
 import noctem.userService.global.enumeration.Grade;
 import noctem.userService.global.enumeration.Role;
@@ -19,7 +16,7 @@ import java.util.List;
  * nickname : 2 ~ 8자리
  */
 @Entity
-@Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserAccount extends BaseEntity {
     @Id
