@@ -11,6 +11,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * alias는 계정당 유일해야됨
+ */
 @Entity
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,8 +27,8 @@ public class MyMenu extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 
     @JsonIgnore
     @OneToMany(mappedBy = "myMenu", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -38,8 +41,8 @@ public class MyMenu extends BaseEntity {
     }
 
     public MyMenu linkToUser(MyMenu myMenu) {
-        this.user = user;
-        user.linkToMyMenu(this);
+        this.userAccount = userAccount;
+        userAccount.linkToMyMenu(this);
         return this;
     }
 

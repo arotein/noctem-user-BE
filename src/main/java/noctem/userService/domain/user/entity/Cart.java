@@ -24,8 +24,8 @@ public class Cart extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,9 +37,9 @@ public class Cart extends BaseEntity {
         this.amount = amount;
     }
 
-    public Cart linkToUser(User user) {
-        this.user = user;
-        user.linkToCart(this);
+    public Cart linkToUser(UserAccount userAccount) {
+        this.userAccount = userAccount;
+        userAccount.linkToCart(this);
         return this;
     }
 

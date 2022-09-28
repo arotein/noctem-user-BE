@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 public enum Grade {
     TALL("Tall"),
     GRANDE("Grande"),
-    VENTI("Venti");
+    VENTI("Venti"),
+    CONSTRUCT(null);
 
     private String value;
 
@@ -19,12 +20,12 @@ public enum Grade {
     }
 
     public Grade findInstance(String str) {
-        switch (str.strip()) {
-            case "Tall":
+        switch (str.strip().toUpperCase()) {
+            case "TALL":
                 return Grade.TALL;
-            case "Grande":
+            case "GRANDE":
                 return Grade.GRANDE;
-            case "Venti":
+            case "VENTI":
                 return Grade.VENTI;
             default:
                 throw CommonException.builder().errorCode(2005).httpStatus(HttpStatus.BAD_REQUEST).build();

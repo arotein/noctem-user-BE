@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /***
  * errorCode: 2000~2999
- * 사용가능 : 2008 ~
+ * 사용가능 : 2015 ~
  */
 
 @Slf4j
