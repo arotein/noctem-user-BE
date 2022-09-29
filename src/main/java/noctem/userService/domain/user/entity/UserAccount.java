@@ -16,6 +16,11 @@ import java.util.List;
 /***
  * password : 8 ~ 40자리
  * nickname : 2 ~ 8자리
+ * gradeAccumulateExp : 누적 경험치
+ * grade : 결제 -> 경험치 증가 -> 등급 업
+ * 0 ~ 9.9만원 : Tall
+ * 10 ~ 39.9만원 : Grande
+ * 40 ~ 만원 : Venti
  */
 @Entity
 @Getter
@@ -36,7 +41,7 @@ public class UserAccount extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Grade grade = Grade.TALL;
-    private Integer gradeExp = 0;
+    private Integer gradeAccumulateExp = 0;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;

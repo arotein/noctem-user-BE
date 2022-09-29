@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import noctem.userService.domain.user.service.UserService;
 import noctem.userService.global.common.CommonResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user-service/optionalInfo")
@@ -30,35 +27,35 @@ public class OptionalInfoController {
                 .build();
     }
 
-    @PutMapping("/darkmode")
+    @PatchMapping("/darkmode")
     public CommonResponse changeDarkmode() {
         return CommonResponse.builder()
                 .data(userService.changeDarkmode())
                 .build();
     }
 
-    @PutMapping("/pushNotification")
+    @PatchMapping("/pushNotification")
     public CommonResponse changePushNotificationAgreement() {
         return CommonResponse.builder()
                 .data(userService.changePushNotificationAgreement())
                 .build();
     }
 
-    @PutMapping("/advertisement")
+    @PatchMapping("/advertisement")
     public CommonResponse changeAdvertisementAgreement() {
         return CommonResponse.builder()
                 .data(userService.changeAdvertisementAgreement())
                 .build();
     }
 
-    @PutMapping("/location")
+    @PatchMapping("/location")
     public CommonResponse changeUseLocationInfoAgreement() {
         return CommonResponse.builder()
                 .data(userService.changeUseLocationInfoAgreement())
                 .build();
     }
 
-    @PutMapping("/shakeToPay")
+    @PatchMapping("/shakeToPay")
     public CommonResponse changeShakeToPay() {
         return CommonResponse.builder()
                 .data(userService.changeShakeToPay())

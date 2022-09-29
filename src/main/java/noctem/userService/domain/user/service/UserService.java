@@ -2,6 +2,7 @@ package noctem.userService.domain.user.service;
 
 import noctem.userService.domain.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.domain.user.dto.request.SignUpReqDto;
+import noctem.userService.domain.user.dto.response.GradeAndRemainingExpResDto;
 import noctem.userService.domain.user.dto.response.OptionalInfoResDto;
 import noctem.userService.domain.user.dto.response.UserPrivacyInfoResDto;
 
@@ -29,6 +30,8 @@ public interface UserService {
     UserPrivacyInfoResDto getPrivacyInfo();
 
     Boolean changeNickname(ChangeNicknameReqDto dto);
+
+    GradeAndRemainingExpResDto getGradeAndRemainingExp();
 
     void updateLastAccessTime(Long id);
 }

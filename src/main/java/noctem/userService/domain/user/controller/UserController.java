@@ -45,10 +45,17 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/userAccount/nickname")
+    @PatchMapping("/userAccount/nickname")
     public CommonResponse changeNickname(@Validated @RequestBody ChangeNicknameReqDto dto) {
         return CommonResponse.builder()
                 .data(userService.changeNickname(dto))
+                .build();
+    }
+
+    @GetMapping("/userAccount/grade")
+    public CommonResponse getGradeAndRemainingExp() {
+        return CommonResponse.builder()
+                .data(userService.getGradeAndRemainingExp())
                 .build();
     }
 }

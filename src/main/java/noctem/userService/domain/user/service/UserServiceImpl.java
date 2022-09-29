@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.domain.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.domain.user.dto.request.SignUpReqDto;
+import noctem.userService.domain.user.dto.response.GradeAndRemainingExpResDto;
 import noctem.userService.domain.user.dto.response.OptionalInfoResDto;
 import noctem.userService.domain.user.dto.response.UserPrivacyInfoResDto;
 import noctem.userService.domain.user.entity.OptionalInfo;
@@ -12,6 +13,7 @@ import noctem.userService.domain.user.entity.UserAccount;
 import noctem.userService.domain.user.entity.UserPrivacy;
 import noctem.userService.domain.user.repository.UserRepository;
 import noctem.userService.global.common.CommonException;
+import noctem.userService.global.enumeration.Grade;
 import noctem.userService.global.enumeration.Sex;
 import noctem.userService.global.security.bean.ClientInfoLoader;
 import org.springframework.http.HttpStatus;
@@ -170,6 +172,34 @@ public class UserServiceImpl implements UserService {
         userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
                 .changeDarkmode();
         return true;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public GradeAndRemainingExpResDto getGradeAndRemainingExp() {
+        if (clientInfoLoader.isAnonymous()) {
+            return new GradeAndRemainingExpResDto(null, null, null, null);
+        }
+        UserAccount userAccount = userRepository.findUserAccount(clientInfoLoader.getUserAccountId());
+        String userGrade = userAccount.getGrade().getValue();
+        Integer userExp;
+        String nextGrade = null;
+        Integer requiredExpToNextGrade = null;
+        // 경험치 계산
+        if (userAccount.getGrade() == Grade.TALL) {
+            nextGrade = Grade.GRANDE.getValue();
+            userExp = userAccount.getGradeAccumulateExp() / Grade.divisionRatio;
+            requiredExpToNextGrade = Grade.GRANDE.getRequiredAccumulateExp() / Grade.divisionRatio;
+
+        } else if (userAccount.getGrade() == Grade.GRANDE) {
+            nextGrade = Grade.VENTI.getValue();
+            userExp = (userAccount.getGradeAccumulateExp() - Grade.GRANDE.getRequiredAccumulateExp()) / Grade.divisionRatio;
+            requiredExpToNextGrade = (Grade.VENTI.getRequiredAccumulateExp() - Grade.GRANDE.getRequiredAccumulateExp()) / Grade.divisionRatio;
+        } else {
+            userExp = (userAccount.getGradeAccumulateExp() - Grade.VENTI.getRequiredAccumulateExp()) / Grade.divisionRatio;
+        }
+
+        return new GradeAndRemainingExpResDto(userGrade, userExp, nextGrade, requiredExpToNextGrade);
     }
 
     @Override
