@@ -1,10 +1,7 @@
 package noctem.userService.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import noctem.userService.global.common.BaseEntity;
 
 import javax.persistence.*;
@@ -15,7 +12,7 @@ import java.util.List;
  * alias는 계정당 유일해야됨
  */
 @Entity
-@Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyMenu extends BaseEntity {
     @Id

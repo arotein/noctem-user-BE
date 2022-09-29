@@ -3,8 +3,10 @@ package noctem.userService.domain.user.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import noctem.userService.global.common.BaseEntity;
+import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Grade;
 import noctem.userService.global.enumeration.Role;
+import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -66,7 +68,7 @@ public class UserAccount extends BaseEntity {
     public UserAccount(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.nickname = nicknameFormatMatching(nickname);
     }
 
     public void updateLastAccessTime() {
@@ -99,5 +101,17 @@ public class UserAccount extends BaseEntity {
         this.optionalInfo = optionalInfo;
         optionalInfo.linkToUserAccount(this);
         return this;
+    }
+
+    public UserAccount changeNickname(String newNickname) {
+        this.nickname = nicknameFormatMatching(newNickname);
+        return this;
+    }
+
+    private String nicknameFormatMatching(String nickname) {
+        if (nickname == null || !nickname.matches("^[가-힣]{2,8}$")) {
+            throw CommonException.builder().errorCode(2013).httpStatus(HttpStatus.BAD_REQUEST).build();
+        }
+        return nickname;
     }
 }

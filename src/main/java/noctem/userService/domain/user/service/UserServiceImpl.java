@@ -2,7 +2,9 @@ package noctem.userService.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import noctem.userService.domain.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.domain.user.dto.request.SignUpReqDto;
+import noctem.userService.domain.user.dto.response.UserPrivacyInfoResDto;
 import noctem.userService.domain.user.entity.OptionalInfo;
 import noctem.userService.domain.user.entity.RequiredInfo;
 import noctem.userService.domain.user.entity.UserAccount;
@@ -105,6 +107,28 @@ public class UserServiceImpl implements UserService {
     public Boolean changeDarkmode() {
         OptionalInfo optionalInfo = userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId());
         optionalInfo.changeDarkmode();
+        return true;
+    }
+
+    @Override
+    public UserPrivacyInfoResDto getPrivacyInfo() {
+        UserPrivacy userPrivacy = userRepository.findUserPrivacyByUserAccountId(clientInfoLoader.getUserAccountId());
+        UserAccount userAccount = userPrivacy.getUserAccount();
+        return new UserPrivacyInfoResDto(userAccount.getEmail(),
+                userPrivacy.getName(),
+                userPrivacy.getSex().getKoValue(),
+                userPrivacy.getBirthdayYear(),
+                userPrivacy.getBirthdayMonth(),
+                userPrivacy.getBirthdayDay(),
+                userPrivacy.getPhoneNumber(),
+                userAccount.getNickname())
+                .applyMasking();
+    }
+
+    @Override
+    public Boolean changeNickname(ChangeNicknameReqDto dto) {
+        UserAccount userAccount = userRepository.findUserAccount(clientInfoLoader.getUserAccountId());
+        userAccount.changeNickname(dto.getNickname());
         return true;
     }
 

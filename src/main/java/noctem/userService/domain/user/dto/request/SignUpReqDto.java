@@ -41,6 +41,10 @@ public class SignUpReqDto {
     }
 
     public SignUpReqDto dataformatMatching() {
+        // 이름 검증
+        if (this.name.length() < 2) {
+            throw CommonException.builder().errorCode(2019).httpStatus(HttpStatus.BAD_REQUEST).build();
+        }
         // 날짜형식 검증
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         try {
@@ -48,10 +52,6 @@ public class SignUpReqDto {
             sdf.parse(this.rrnFront);
         } catch (Exception exception) {
             throw CommonException.builder().errorCode(2012).httpStatus(HttpStatus.BAD_REQUEST).build();
-        }
-        // 닉네임 검증
-        if (this.nickname == null || !this.nickname.matches("^[가-힣]{2,8}$")) {
-            throw CommonException.builder().errorCode(2013).httpStatus(HttpStatus.BAD_REQUEST).build();
         }
         // 비밀번호 검증
         if (this.password == null || !this.password.matches("^[\\w/\\{\\}\\[\\]\\/?.,;:|\\)*~`!^\\-+<>@\\#$%&\\\\\\=\\(\\'\\\"]{8,40}$")) {

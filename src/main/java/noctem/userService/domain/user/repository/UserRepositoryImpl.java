@@ -3,6 +3,7 @@ package noctem.userService.domain.user.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import noctem.userService.domain.user.entity.OptionalInfo;
 import noctem.userService.domain.user.entity.UserAccount;
+import noctem.userService.domain.user.entity.UserPrivacy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,7 @@ import java.sql.Timestamp;
 
 import static noctem.userService.domain.user.entity.QOptionalInfo.optionalInfo;
 import static noctem.userService.domain.user.entity.QUserAccount.userAccount;
+import static noctem.userService.domain.user.entity.QUserPrivacy.userPrivacy;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -41,6 +43,14 @@ public class UserRepositoryImpl implements UserRepository {
     public UserAccount findUserAccountByEmail(String email) {
         return queryFactory.selectFrom(userAccount)
                 .where(userAccount.email.eq(email))
+                .fetchOne();
+    }
+
+    @Override
+    public UserPrivacy findUserPrivacyByUserAccountId(Long id) {
+        return queryFactory.selectFrom(userPrivacy)
+                .join(userPrivacy.userAccount, userAccount).fetchJoin()
+                .where(userAccount.id.eq(id))
                 .fetchOne();
     }
 

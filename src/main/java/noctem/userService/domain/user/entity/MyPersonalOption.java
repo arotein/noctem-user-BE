@@ -1,16 +1,13 @@
 package noctem.userService.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import noctem.userService.global.common.BaseEntity;
 
 import javax.persistence.*;
 
 @Entity
-@Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyPersonalOption extends BaseEntity {
     @Id

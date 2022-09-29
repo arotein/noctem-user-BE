@@ -1,6 +1,7 @@
 package noctem.userService.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import noctem.userService.domain.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.domain.user.dto.request.SignUpReqDto;
 import noctem.userService.domain.user.service.UserService;
 import noctem.userService.global.common.CommonResponse;
@@ -36,18 +37,18 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/optionalInfo/darkmode")
-    public CommonResponse isDarkmode() {
+    @GetMapping("/userAccount")
+    public CommonResponse getPrivacy() {
         return CommonResponse.builder()
-                .data(userService.isDarkmode())
+                .data(userService.getPrivacyInfo())
                 .build();
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/optionalInfo/darkmode")
-    public CommonResponse changeDarkmode() {
+    @PutMapping("/userAccount/nickname")
+    public CommonResponse changeNickname(@Validated @RequestBody ChangeNicknameReqDto dto) {
         return CommonResponse.builder()
-                .data(userService.changeDarkmode())
+                .data(userService.changeNickname(dto))
                 .build();
     }
 }
