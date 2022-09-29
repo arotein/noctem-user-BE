@@ -23,17 +23,19 @@ public class OptionalInfo extends BaseEntity {
     private Boolean pushNotificationAgreement;
     private Boolean advertisementAgreement;
     private Boolean useLocationInfoAgreement;
+    private Boolean shakeToPay;
 
     @JsonIgnore
     @OneToOne(mappedBy = "optionalInfo", fetch = FetchType.LAZY)
     private UserAccount userAccount;
 
     @Builder
-    public OptionalInfo(Boolean pushNotificationAgreement, Boolean advertisementAgreement, Boolean useLocationInfoAgreement) {
+    public OptionalInfo(Boolean advertisementAgreement) {
+        this.advertisementAgreement = advertisementAgreement; // 회원가입시 입력받음
         this.isDarkmode = false;
-        this.pushNotificationAgreement = pushNotificationAgreement;
-        this.advertisementAgreement = advertisementAgreement;
-        this.useLocationInfoAgreement = useLocationInfoAgreement;
+        this.pushNotificationAgreement = false;
+        this.useLocationInfoAgreement = false;
+        this.shakeToPay = false;
     }
 
     public OptionalInfo linkToUserAccount(UserAccount userAccount) {
@@ -43,6 +45,26 @@ public class OptionalInfo extends BaseEntity {
 
     public OptionalInfo changeDarkmode() {
         this.isDarkmode = this.isDarkmode ? false : true;
+        return this;
+    }
+
+    public OptionalInfo changePushNotificationAgreement() {
+        this.pushNotificationAgreement = this.pushNotificationAgreement ? false : true;
+        return this;
+    }
+
+    public OptionalInfo changeAdvertisementAgreement() {
+        this.advertisementAgreement = this.advertisementAgreement ? false : true;
+        return this;
+    }
+
+    public OptionalInfo changeUseLocationInfoAgreement() {
+        this.useLocationInfoAgreement = this.useLocationInfoAgreement ? false : true;
+        return this;
+    }
+
+    public OptionalInfo changeShakeToPay() {
+        this.shakeToPay = this.shakeToPay ? false : true;
         return this;
     }
 }

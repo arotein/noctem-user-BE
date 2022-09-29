@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.domain.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.domain.user.dto.request.SignUpReqDto;
+import noctem.userService.domain.user.dto.response.OptionalInfoResDto;
 import noctem.userService.domain.user.dto.response.UserPrivacyInfoResDto;
 import noctem.userService.domain.user.entity.OptionalInfo;
 import noctem.userService.domain.user.entity.RequiredInfo;
@@ -97,19 +98,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.existNickname(nickname);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Boolean isDarkmode() {
-        return userRepository.isDarkmode(clientInfoLoader.getUserAccountId());
-    }
-
-    @Override
-    public Boolean changeDarkmode() {
-        OptionalInfo optionalInfo = userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId());
-        optionalInfo.changeDarkmode();
-        return true;
-    }
-
     @Override
     public UserPrivacyInfoResDto getPrivacyInfo() {
         UserPrivacy userPrivacy = userRepository.findUserPrivacyByUserAccountId(clientInfoLoader.getUserAccountId());
@@ -129,6 +117,58 @@ public class UserServiceImpl implements UserService {
     public Boolean changeNickname(ChangeNicknameReqDto dto) {
         UserAccount userAccount = userRepository.findUserAccount(clientInfoLoader.getUserAccountId());
         userAccount.changeNickname(dto.getNickname());
+        return true;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public OptionalInfoResDto getAllOptionalInfo() {
+        OptionalInfo optionalInfo = userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId());
+        return new OptionalInfoResDto(optionalInfo.getIsDarkmode(),
+                optionalInfo.getPushNotificationAgreement(),
+                optionalInfo.getAdvertisementAgreement(),
+                optionalInfo.getUseLocationInfoAgreement(),
+                optionalInfo.getShakeToPay());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean isDarkmode() {
+        return userRepository.isDarkmode(clientInfoLoader.getUserAccountId());
+    }
+
+    @Override
+    public Boolean changePushNotificationAgreement() {
+        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+                .changePushNotificationAgreement();
+        return true;
+    }
+
+    @Override
+    public Boolean changeAdvertisementAgreement() {
+        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+                .changeAdvertisementAgreement();
+        return true;
+    }
+
+    @Override
+    public Boolean changeUseLocationInfoAgreement() {
+        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+                .changeUseLocationInfoAgreement();
+        return true;
+    }
+
+    @Override
+    public Boolean changeShakeToPay() {
+        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+                .changeShakeToPay();
+        return true;
+    }
+
+    @Override
+    public Boolean changeDarkmode() {
+        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+                .changeDarkmode();
         return true;
     }
 

@@ -12,10 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/user-service/optionalInfo")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class OptionalInfoController {
     private final UserService userService;
 
-    @PreAuthorize("hasRole('USER')")
+    @GetMapping("")
+    public CommonResponse getOptionalInfo() {
+        return CommonResponse.builder()
+                .data(userService.getAllOptionalInfo())
+                .build();
+    }
+
     @GetMapping("/darkmode")
     public CommonResponse isDarkmode() {
         return CommonResponse.builder()
@@ -23,11 +30,38 @@ public class OptionalInfoController {
                 .build();
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PutMapping("/darkmode")
     public CommonResponse changeDarkmode() {
         return CommonResponse.builder()
                 .data(userService.changeDarkmode())
+                .build();
+    }
+
+    @PutMapping("/pushNotification")
+    public CommonResponse changePushNotificationAgreement() {
+        return CommonResponse.builder()
+                .data(userService.changePushNotificationAgreement())
+                .build();
+    }
+
+    @PutMapping("/advertisement")
+    public CommonResponse changeAdvertisementAgreement() {
+        return CommonResponse.builder()
+                .data(userService.changeAdvertisementAgreement())
+                .build();
+    }
+
+    @PutMapping("/location")
+    public CommonResponse changeUseLocationInfoAgreement() {
+        return CommonResponse.builder()
+                .data(userService.changeUseLocationInfoAgreement())
+                .build();
+    }
+
+    @PutMapping("/shakeToPay")
+    public CommonResponse changeShakeToPay() {
+        return CommonResponse.builder()
+                .data(userService.changeShakeToPay())
                 .build();
     }
 }

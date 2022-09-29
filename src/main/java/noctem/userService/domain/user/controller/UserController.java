@@ -38,7 +38,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/userAccount")
-    public CommonResponse getPrivacy() {
+    public CommonResponse getUserAccountAndPrivacy() {
         return CommonResponse.builder()
                 .data(userService.getPrivacyInfo())
                 .build();
