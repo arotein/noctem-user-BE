@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /***
- * alias는 계정당 유일해야됨
+ * alias : 계정당 유일해야됨
+ * sequence : 나만의 메뉴 순서
  */
 @Entity
 @Getter
@@ -19,8 +20,9 @@ public class MyMenu extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "my_menu_id")
     private Long id;
-    private Long sizeId;
     private String alias;
+    private Long sizeId;
+    private Integer sequence;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

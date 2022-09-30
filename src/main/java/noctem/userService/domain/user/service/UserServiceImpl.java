@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public GradeAndRemainingExpResDto getGradeAndRemainingExp() {
         if (clientInfoLoader.isAnonymous()) {
-            return new GradeAndRemainingExpResDto(null, null, null, null);
+            throw CommonException.builder().errorCode(2001).httpStatus(HttpStatus.UNAUTHORIZED).build();
         }
         UserAccount userAccount = userRepository.findUserAccount(clientInfoLoader.getUserAccountId());
         String userGrade = userAccount.getGrade().getValue();
