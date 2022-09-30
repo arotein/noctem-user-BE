@@ -60,6 +60,14 @@ management:
     tags:
       application: ${spring.application.name}
 
+logging:
+  charset:
+    console: UTF-8
+    file: UTF-8
+  level:
+    root: info
+    org.hibernate.SQL: debug
+
 global:
   jwt-token:
     signer: ${NOCTEM_JWT_SIGNER}
