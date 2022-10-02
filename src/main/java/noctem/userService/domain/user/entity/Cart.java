@@ -17,7 +17,7 @@ public class Cart extends BaseEntity {
     @Column(name = "cart_id")
     private Long id;
     private Long sizeId;
-    private Integer amount;
+    private Integer qty;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,9 +29,9 @@ public class Cart extends BaseEntity {
     private List<MyPersonalOption> myPersonalOptionList = new ArrayList<>();
 
     @Builder
-    public Cart(Long sizeId, Integer amount) {
+    public Cart(Long sizeId, Integer qty) {
         this.sizeId = sizeId;
-        this.amount = amount;
+        this.qty = qty;
     }
 
     public Cart linkToUser(UserAccount userAccount) {
@@ -40,9 +40,20 @@ public class Cart extends BaseEntity {
         return this;
     }
 
-    public Cart linkToMyPersonalOption(List<MyPersonalOption> myPersonalOptionList) {
+    public Cart linkToMyPersonalOption(MyPersonalOption myPersonalOption) {
+        this.myPersonalOptionList.add(myPersonalOption);
+        myPersonalOption.linkToCart(this);
+        return this;
+    }
+
+    public Cart linkToMyPersonalOptionList(List<MyPersonalOption> myPersonalOptionList) {
         this.myPersonalOptionList.addAll(myPersonalOptionList);
         myPersonalOptionList.forEach(e -> e.linkToCart(this));
+        return this;
+    }
+
+    public Cart changeQty(Integer qty) {
+        this.qty = qty;
         return this;
     }
 }

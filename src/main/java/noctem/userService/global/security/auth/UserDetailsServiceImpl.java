@@ -3,7 +3,7 @@ package noctem.userService.global.security.auth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.domain.user.entity.UserAccount;
-import noctem.userService.domain.user.repository.UserRepository;
+import noctem.userService.domain.user.repository.UserAccountRepository;
 import noctem.userService.global.common.SecurityCustomException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,11 +22,11 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserAccount user = userRepository.findUserAccountByEmail(email);
+        UserAccount user = userAccountRepository.findByEmail(email);
         // 계정 검증
         if (user == null) {
             log.warn("Login request: email does not exist or incorrect password");

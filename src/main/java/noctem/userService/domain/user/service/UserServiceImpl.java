@@ -11,11 +11,14 @@ import noctem.userService.domain.user.entity.OptionalInfo;
 import noctem.userService.domain.user.entity.RequiredInfo;
 import noctem.userService.domain.user.entity.UserAccount;
 import noctem.userService.domain.user.entity.UserPrivacy;
-import noctem.userService.domain.user.repository.UserRepository;
+import noctem.userService.domain.user.repository.OptionalInfoRepository;
+import noctem.userService.domain.user.repository.UserAccountRepository;
+import noctem.userService.domain.user.repository.UserPrivacyRepository;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Grade;
 import noctem.userService.global.enumeration.Sex;
 import noctem.userService.global.security.bean.ClientInfoLoader;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
+    private final UserPrivacyRepository userPrivacyRepository;
+    private final OptionalInfoRepository optionalInfoRepository;
     private final PasswordEncoder passwordEncoder;
     private final ClientInfoLoader clientInfoLoader;
 
@@ -84,25 +89,25 @@ public class UserServiceImpl implements UserService {
                 .linkToRequiredInfo(requiredInfo)
                 .linkToOptionalInfo(optionalInfo);
 
-        userRepository.saveUserAccount(userAccount);
+        userAccountRepository.save(userAccount);
         return true;
     }
 
     @Transactional(readOnly = true)
     @Override
     public Boolean duplCheckEmail(String email) {
-        return userRepository.existEmail(email);
+        return userAccountRepository.existsByEmail(email);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Boolean duplCheckNickname(String nickname) {
-        return userRepository.existNickname(nickname);
+        return userAccountRepository.existsByNickname(nickname);
     }
 
     @Override
     public UserPrivacyInfoResDto getPrivacyInfo() {
-        UserPrivacy userPrivacy = userRepository.findUserPrivacyByUserAccountId(clientInfoLoader.getUserAccountId());
+        UserPrivacy userPrivacy = userPrivacyRepository.findByUserAccountId(clientInfoLoader.getUserAccountId());
         UserAccount userAccount = userPrivacy.getUserAccount();
         return new UserPrivacyInfoResDto(userAccount.getEmail(),
                 userPrivacy.getName(),
@@ -117,15 +122,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean changeNickname(ChangeNicknameReqDto dto) {
-        UserAccount userAccount = userRepository.findUserAccount(clientInfoLoader.getUserAccountId());
-        userAccount.changeNickname(dto.getNickname());
+        userAccountRepository.findById(clientInfoLoader.getUserAccountId())
+                .get().changeNickname(dto.getNickname());
         return true;
     }
 
     @Transactional(readOnly = true)
     @Override
     public OptionalInfoResDto getAllOptionalInfo() {
-        OptionalInfo optionalInfo = userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId());
+        OptionalInfo optionalInfo = optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId());
         return new OptionalInfoResDto(optionalInfo.getIsDarkmode(),
                 optionalInfo.getPushNotificationAgreement(),
                 optionalInfo.getAdvertisementAgreement(),
@@ -136,40 +141,40 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Boolean isDarkmode() {
-        return userRepository.isDarkmode(clientInfoLoader.getUserAccountId());
+        return optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId()).getIsDarkmode();
     }
 
     @Override
     public Boolean changePushNotificationAgreement() {
-        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+        optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
                 .changePushNotificationAgreement();
         return true;
     }
 
     @Override
     public Boolean changeAdvertisementAgreement() {
-        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+        optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
                 .changeAdvertisementAgreement();
         return true;
     }
 
     @Override
     public Boolean changeUseLocationInfoAgreement() {
-        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+        optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
                 .changeUseLocationInfoAgreement();
         return true;
     }
 
     @Override
     public Boolean changeShakeToPay() {
-        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+        optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
                 .changeShakeToPay();
         return true;
     }
 
     @Override
     public Boolean changeDarkmode() {
-        userRepository.findOptionalInfoByUserAccountId(clientInfoLoader.getUserAccountId())
+        optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
                 .changeDarkmode();
         return true;
     }
@@ -180,7 +185,7 @@ public class UserServiceImpl implements UserService {
         if (clientInfoLoader.isAnonymous()) {
             throw CommonException.builder().errorCode(2001).httpStatus(HttpStatus.UNAUTHORIZED).build();
         }
-        UserAccount userAccount = userRepository.findUserAccount(clientInfoLoader.getUserAccountId());
+        UserAccount userAccount = userAccountRepository.findById(clientInfoLoader.getUserAccountId()).get();
         String userGrade = userAccount.getGrade().getValue();
         Integer userExp;
         String nextGrade = null;
@@ -202,8 +207,9 @@ public class UserServiceImpl implements UserService {
         return new GradeAndRemainingExpResDto(userGrade, userExp, nextGrade, requiredExpToNextGrade);
     }
 
+    @Modifying(clearAutomatically = true)
     @Override
     public void updateLastAccessTime(Long userAccountId) {
-        userRepository.updateLastAccessTime(userAccountId);
+        userAccountRepository.findById(userAccountId).get().updateLastAccessTime();
     }
 }
