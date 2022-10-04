@@ -1,5 +1,6 @@
 server:
   port: 0
+#  port: 12345
   servlet:
     encoding:
       charset: UTF-8
@@ -23,7 +24,7 @@ spring:
         enabled: true
       destination: config-topic
   kafka:
-    bootstrap-servers: http://${KAFKA_SERVER}:9092 # 카프카 클러스터 주소
+    bootstrap-servers: http://${KAFKA_SERVER}:9092
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_SERVER}:3306/user?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
@@ -37,6 +38,9 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate.ddl-auto: update
+  redis:
+    host: ${REDIS_SERVER}
+    port: 6379
 
 eureka:
   instance:
