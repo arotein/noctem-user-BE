@@ -45,6 +45,7 @@ public class JwtRequestProcessingFilter extends AbstractAuthenticationProcessing
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         if (req.getHeader(JwtAuthenticationToken.JWT_HEADER) == null) {
+            log.info("JWT is not included in the request.");
             chain.doFilter(req, res);
         } else {
             try {
