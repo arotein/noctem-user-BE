@@ -18,12 +18,12 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private Object credentials;
     public static final String JWT_HEADER = "Authorization";
     public static final String JWT_SIGNER = System.getenv("NOCTEM_JWT_SIGNER");
-    public static final String JWT_ISSUER = "Cafe Noctem";
+    public static final String JWT_ISSUER = "cafeNoctem";
     public static final String JWT_USER_ID = "id";
     public static final String JWT_NICKNAME = "nickname";
     public static final String JWT_EMAIL = "email";
     public static final String JWT_ROLE = "role";
-    public static final String JWT_LOGIN_DTTM = "loginDate";
+    public static final String JWT_LOGIN_DTTM = "loginDateTime";
 
     public JwtAuthenticationToken(SecurityLoginReqDto loginReqDto) {
         super(null);

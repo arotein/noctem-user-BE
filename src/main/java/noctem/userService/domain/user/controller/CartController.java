@@ -6,7 +6,7 @@ import noctem.userService.domain.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuQtyReqDto;
 import noctem.userService.domain.user.service.CartService;
 import noctem.userService.global.common.CommonResponse;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user-service/carts")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('USER')")
+@PostAuthorize("hasRole('USER')")
 public class CartController {
     private final CartService cartService;
 

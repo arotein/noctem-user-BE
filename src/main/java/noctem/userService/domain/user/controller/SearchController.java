@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import noctem.userService.domain.user.dto.request.SearchReqDto;
 import noctem.userService.domain.user.service.SearchService;
 import noctem.userService.global.common.CommonResponse;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user-service/search")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('USER')")
+@PostAuthorize("hasRole('USER')")
 public class SearchController {
     private final SearchService searchService;
 

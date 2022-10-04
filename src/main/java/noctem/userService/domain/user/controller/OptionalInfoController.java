@@ -3,13 +3,16 @@ package noctem.userService.domain.user.controller;
 import lombok.RequiredArgsConstructor;
 import noctem.userService.domain.user.service.UserService;
 import noctem.userService.global.common.CommonResponse;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/user-service/optionalInfo")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('USER')")
+@PostAuthorize("hasRole('USER')")
 public class OptionalInfoController {
     private final UserService userService;
 
