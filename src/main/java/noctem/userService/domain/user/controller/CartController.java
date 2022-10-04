@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user-service/carts")
+@RequestMapping("${global.api.base-path}/carts")
 @RequiredArgsConstructor
 @PostAuthorize("hasRole('USER')")
 public class CartController {

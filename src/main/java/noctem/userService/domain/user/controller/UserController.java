@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user-service")
+@RequestMapping("${global.api.base-path}")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;

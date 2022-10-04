@@ -1,6 +1,5 @@
 server:
   port: 0
-#  port: 12345
   servlet:
     encoding:
       charset: UTF-8
@@ -10,7 +9,7 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: ${USER-SERVICE}
   config:
     import: optional:configserver:http://${CONFIG_SERVER}:8888
   profiles:
@@ -54,7 +53,7 @@ eureka:
 management:
   endpoints:
     web:
-      base-path: /api/user-service/actuator
+      base-path: /api/${USER-SERVICE}/actuator
       exposure:
         include: health, refresh, httptrace, busrefresh, prometheus, metrics
   metrics:
@@ -75,4 +74,6 @@ logging:
 global:
   jwt-token:
     signer: ${NOCTEM_JWT_SIGNER}
+  api:
+    base-path: /api/${USER-SERVICE}
   value: local-user

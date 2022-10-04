@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user-service/optionalInfo")
+@RequestMapping("${global.api.base-path}/optionalInfo")
 @RequiredArgsConstructor
 @PostAuthorize("hasRole('USER')")
 public class OptionalInfoController {
