@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /***
  * errorCode: 2000~2999
- * 사용가능 : 2020 ~
+ * 사용가능 : 2021 ~
  */
 
 @Slf4j
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
-//    @ExceptionHandler
-//    public ResponseEntity runtimeExHandle(RuntimeException ex) {
-//        log.error("Exception Name = {}, Code = 2000, Message = {}", ex.getClass().getName(), ex.getMessage());
-//        return ResponseEntity.ok()
-//                .body(CommonResponse.builder().errorCode(2000).build());
-//    }
+    @ExceptionHandler
+    public ResponseEntity runtimeExHandle(RuntimeException ex) {
+        log.error("Exception Name = {}, Code = 2000, Message = {}", ex.getClass().getName(), ex.getMessage());
+        return ResponseEntity.ok()
+                .body(CommonResponse.builder().errorCode(2000).build());
+    }
 
     @ExceptionHandler
     public ResponseEntity accessDeniedExHandle(AccessDeniedException ex) {

@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 계정 검증
         if (user == null) {
             log.warn("Login request: email does not exist or incorrect password");
-            throw new SecurityCustomException(2017, HttpStatus.BAD_REQUEST);
+            throw new SecurityCustomException(2020, HttpStatus.BAD_REQUEST);
         }
         // 계정 권한
         List<GrantedAuthority> roles = new ArrayList<>();
