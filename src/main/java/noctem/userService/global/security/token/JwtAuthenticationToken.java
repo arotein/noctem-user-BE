@@ -7,8 +7,10 @@ import noctem.userService.global.security.dto.ClientInfoDto;
 import noctem.userService.global.security.dto.SecurityLoginReqDto;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private final Object principal; // UserDetailsImpl객체 저장
@@ -21,6 +23,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public static final String JWT_NICKNAME = "nickname";
     public static final String JWT_EMAIL = "email";
     public static final String JWT_ROLE = "role";
+    public static final String JWT_LOGIN_DTTM = "loginDate";
 
     public JwtAuthenticationToken(SecurityLoginReqDto loginReqDto) {
         super(null);
@@ -37,6 +40,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     private String generateJwt(UserDetailsImpl userDetails) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ClientInfoDto clientInfoDto = userDetails.getClientInfoDto();
 
         HMACSigner secretKey = HMACSigner.newSHA256Signer(JWT_SIGNER);
@@ -46,6 +50,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
                 .addClaim(JWT_NICKNAME, clientInfoDto.getNickname())
                 .addClaim(JWT_EMAIL, clientInfoDto.getEmail())
                 .addClaim(JWT_ROLE, clientInfoDto.getRole())
+                .addClaim(JWT_LOGIN_DTTM, simpleDateFormat.format(new Date()))
                 .setExpiration(ZonedDateTime.now(ZoneId.of("Asia/Seoul")).plusYears(1));
         // 요청헤더 Authorization : Bearer <JWT>
         return String.format("Bearer %s", JWT.getEncoder().encode(rawJwt, secretKey));

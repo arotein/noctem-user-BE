@@ -27,6 +27,7 @@ public class RequestLogAspect {
             log.info("[ANONYMOUS] {} {} {}", request.getMethod(), request.getRequestURI(), target.getClass().getSimpleName());
         } else {
             log.info("[{} {}] {} {}", clientInfoLoader.getUserAccountId(), clientInfoLoader.getUserNickname(), request.getMethod(), request.getRequestURI());
+            log.info("[{}] {} {} {}", clientInfoLoader.getUserAccountId(), clientInfoLoader.getUserNickname(), clientInfoLoader.getUserRole(), clientInfoLoader.getUserEmail());
         }
         return joinPoint.proceed();
     }
