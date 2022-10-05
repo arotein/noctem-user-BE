@@ -22,7 +22,7 @@ public class MyMenu extends BaseEntity {
     private Long id;
     private String alias;
     private Long sizeId;
-    private Integer sequence;
+    private Integer myMenuOrder;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,15 +39,31 @@ public class MyMenu extends BaseEntity {
         this.alias = alias;
     }
 
-    public MyMenu linkToUser(MyMenu myMenu) {
+    public MyMenu linkToUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
         userAccount.linkToMyMenu(this);
         return this;
     }
 
-    public MyMenu linkToMyPersonalOption(List<MyPersonalOption> myPersonalOptionList) {
+    public MyMenu linkToMyPersonalOption(MyPersonalOption myPersonalOption) {
+        this.myPersonalOptionList.add(myPersonalOption);
+        myPersonalOption.linkToMyMenu(this);
+        return this;
+    }
+
+    public MyMenu linkToMyPersonalOptionList(List<MyPersonalOption> myPersonalOptionList) {
         this.myPersonalOptionList.addAll(myPersonalOptionList);
         myPersonalOptionList.forEach(e -> e.linkToMyMenu(this));
+        return this;
+    }
+
+    public MyMenu changeAlias(String alias) {
+        this.alias = alias;
+        return this;
+    }
+
+    public MyMenu changeMyMenuOrder(Integer myMenuOrder) {
+        this.myMenuOrder = myMenuOrder;
         return this;
     }
 }

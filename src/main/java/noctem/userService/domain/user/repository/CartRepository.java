@@ -15,6 +15,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     Long countByUserAccountId(Long userAccountId);
 
+    @Override
     @EntityGraph(attributePaths = {"myPersonalOptionList", "userAccount"})
-    Cart findBySizeId(Long sizeId);
+    Cart getById(Long cartId);
 }

@@ -2,13 +2,15 @@ package noctem.userService.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import noctem.userService.domain.user.dto.request.AddMenuReqDto;
 import noctem.userService.domain.user.dto.MenuComparisonJsonDto;
+import noctem.userService.domain.user.dto.request.AddCartReqDto;
+import noctem.userService.domain.user.dto.request.CartAndOptionsReqServDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuQtyReqDto;
-import noctem.userService.domain.user.dto.response.CartAndOptionsResDto;
+import noctem.userService.domain.user.dto.response.CartListResDto;
 import noctem.userService.domain.user.entity.Cart;
 import noctem.userService.domain.user.entity.MyPersonalOption;
+import noctem.userService.domain.user.feignClient.MenuFeignClient;
 import noctem.userService.domain.user.repository.CartRepository;
 import noctem.userService.domain.user.repository.UserAccountRepository;
 import noctem.userService.global.common.CommonException;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,24 +34,33 @@ public class CartServiceImpl implements CartService {
     private final UserAccountRepository userAccountRepository;
     private final CartRepository cartRepository;
     private final ClientInfoLoader clientInfoLoader;
+    private final MenuFeignClient menuFeignClient;
 
     @Override
-    public List<CartAndOptionsResDto> getCartList() {
-        // menu-service에서 데이터 받아와서 리턴
+    public List<CartListResDto> getCartList() {
+        List<Cart> cartList = cartRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
+        List<CartListResDto> data = menuFeignClient.getCartListDtoList(cartList.stream()
+                        .map(e -> new CartAndOptionsReqServDto(e.getSizeId(),
+                                e.getMyPersonalOptionList().stream()
+                                        .map(MyPersonalOption::getPersonalOptionId)
+                                        .collect(Collectors.toList())))
+                        .collect(Collectors.toList()))
+                .getData();
+        // data에 qty와 totalMenuPrice 추가하여 리턴
         return null;
     }
 
     @Override
     public Long getCartTotalQty() {
-        return clientInfoLoader.isAnonymous() ? 0 : cartRepository.countByUserAccountId(clientInfoLoader.getUserAccountId());
+        return cartRepository.countByUserAccountId(clientInfoLoader.getUserAccountId());
     }
 
     @Override
-    public Boolean addMenuToCart(AddMenuReqDto dto) {
+    public Boolean addMenuToCart(AddCartReqDto dto) {
         List<Cart> cartList = cartRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
         Map<String, Cart> cartMap = new HashMap<>();
         cartList.forEach(e -> cartMap.put(new MenuComparisonJsonDto().cartAndOptionEntityToJson(e), e));
-        String dtoJson = new MenuComparisonJsonDto().reqDtoToJson(dto);
+        String dtoJson = new MenuComparisonJsonDto().addCartReqDtoToJson(dto);
         if (cartMap.containsKey(dtoJson)) {
             // 이미 존재하는 메뉴 -> 수량만 추가
             cartMap.get(dtoJson).plusQty(dto.getQuantity());
@@ -68,14 +80,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Boolean changeMenuQty(Long sizeId, ChangeMenuQtyReqDto dto) {
-        cartRepository.findById(sizeId).get().changeQty(dto.getQty());
+    public Boolean changeMenuQty(Long cartId, ChangeMenuQtyReqDto dto) {
+        identificationCart(cartId).changeQty(dto.getQty());
         return true;
     }
 
     @Override
-    public Boolean changeMenuOption(Long sizeId, List<ChangeMenuOptionReqDto> dtoList) {
-        Cart cart = identificationMenu(sizeId);
+    public Boolean changeMenuOption(Long cartId, List<ChangeMenuOptionReqDto> dtoList) {
+        Cart cart = identificationCart(cartId);
         Map<Long, MyPersonalOption> optionMap = cart.getMyPersonalOptionList()
                 .stream().collect(Collectors.toMap(MyPersonalOption::getId, e -> e));
         dtoList.forEach(e -> {
@@ -93,16 +105,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Boolean delMenu(Long sizeId) {
-        identificationMenu(sizeId);
-        cartRepository.deleteById(sizeId);
+    public Boolean delMenu(Long cartId) {
+        cartRepository.delete(identificationCart(cartId));
         return true;
     }
 
-    // 요청한 menu가 본인 것이 맞는지 확인
-    private Cart identificationMenu(Long sizeId) {
-        Cart cart = cartRepository.findBySizeId(sizeId);
-        if (cart.getUserAccount().getId() != clientInfoLoader.getUserAccountId()) {
+    // 요청한 cart가 본인 것이 맞는지 확인
+    private Cart identificationCart(Long cartId) {
+        Cart cart = cartRepository.getById(cartId);
+        if (!Objects.equals(cart.getUserAccount().getId(), clientInfoLoader.getUserAccountId())) {
             throw CommonException.builder().errorCode(2001).httpStatus(HttpStatus.UNAUTHORIZED).build();
         }
         return cart;

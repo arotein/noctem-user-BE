@@ -1,7 +1,7 @@
 package noctem.userService.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import noctem.userService.domain.user.dto.request.AddMenuReqDto;
+import noctem.userService.domain.user.dto.request.AddCartReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuQtyReqDto;
 import noctem.userService.domain.user.service.CartService;
@@ -34,7 +34,7 @@ public class CartController {
     }
 
     @PostMapping("")
-    public CommonResponse addMenuToCart(@Validated @RequestBody AddMenuReqDto dto) {
+    public CommonResponse addMenuToCart(@Validated @RequestBody AddCartReqDto dto) {
         return CommonResponse.builder()
                 .data(cartService.addMenuToCart(dto))
                 .build();

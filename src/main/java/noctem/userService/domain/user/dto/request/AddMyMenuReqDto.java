@@ -8,8 +8,8 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class AddMenuReqDto {
+public class AddMyMenuReqDto {
     private Long sizeId;
-    private Integer quantity;
+    private String alias;
     private List<UserStaticDto.PersonalOptionReqDto> personalOptionList;
 }

@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.AppConfig;
-import noctem.userService.domain.user.dto.request.AddMenuReqDto;
+import noctem.userService.domain.user.dto.request.AddCartReqDto;
+import noctem.userService.domain.user.dto.request.AddMyMenuReqDto;
 import noctem.userService.domain.user.entity.Cart;
+import noctem.userService.domain.user.entity.MyMenu;
 import noctem.userService.global.common.CommonException;
 
 import java.util.ArrayList;
@@ -20,7 +22,14 @@ public class MenuComparisonJsonDto {
     private Long sizeId;
     private List<UserStaticDto.PersonalOptionReqDto> personalOptionList;
 
-    public String reqDtoToJson(AddMenuReqDto dto) {
+    public String addCartReqDtoToJson(AddCartReqDto dto) {
+        this.sizeId = dto.getSizeId();
+        this.personalOptionList = dto.getPersonalOptionList();
+        sortPersonalOptionList();
+        return toJson();
+    }
+
+    public String addMyMenuReqDtoToJson(AddMyMenuReqDto dto) {
         this.sizeId = dto.getSizeId();
         this.personalOptionList = dto.getPersonalOptionList();
         sortPersonalOptionList();
@@ -31,6 +40,15 @@ public class MenuComparisonJsonDto {
         this.sizeId = cart.getSizeId();
         this.personalOptionList = new ArrayList<>();
         cart.getMyPersonalOptionList()
+                .forEach(e -> this.personalOptionList.add(new UserStaticDto.PersonalOptionReqDto(e)));
+        sortPersonalOptionList();
+        return toJson();
+    }
+
+    public String myMenuAndOptionEntityToJson(MyMenu myMenu) {
+        this.sizeId = myMenu.getSizeId();
+        this.personalOptionList = new ArrayList<>();
+        myMenu.getMyPersonalOptionList()
                 .forEach(e -> this.personalOptionList.add(new UserStaticDto.PersonalOptionReqDto(e)));
         sortPersonalOptionList();
         return toJson();

@@ -25,6 +25,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<String> getAllQuery() {
         return searchRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
     }

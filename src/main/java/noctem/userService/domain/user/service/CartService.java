@@ -1,18 +1,18 @@
 package noctem.userService.domain.user.service;
 
-import noctem.userService.domain.user.dto.request.AddMenuReqDto;
+import noctem.userService.domain.user.dto.request.AddCartReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuQtyReqDto;
-import noctem.userService.domain.user.dto.response.CartAndOptionsResDto;
+import noctem.userService.domain.user.dto.response.CartListResDto;
 
 import java.util.List;
 
 public interface CartService {
-    List<CartAndOptionsResDto> getCartList();
+    List<CartListResDto> getCartList();
 
     Long getCartTotalQty();
 
-    Boolean addMenuToCart(AddMenuReqDto dto);
+    Boolean addMenuToCart(AddCartReqDto dto);
 
     Boolean changeMenuQty(Long sizeId, ChangeMenuQtyReqDto dto);
 

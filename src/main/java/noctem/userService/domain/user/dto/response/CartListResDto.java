@@ -5,5 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CartAndOptionsResDto {
+public class CartListResDto {
+    private Integer totalMenuPrice;
+    private Integer qty;
 }

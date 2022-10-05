@@ -105,6 +105,7 @@ public class UserServiceImpl implements UserService {
         return userAccountRepository.existsByNickname(nickname);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserPrivacyInfoResDto getPrivacyInfo() {
         UserPrivacy userPrivacy = userPrivacyRepository.findByUserAccountId(clientInfoLoader.getUserAccountId());
