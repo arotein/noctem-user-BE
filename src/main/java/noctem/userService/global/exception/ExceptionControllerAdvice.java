@@ -6,6 +6,7 @@ import noctem.userService.global.common.CommonResponse;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /***
  * errorCode: 2000~2999
- * 사용가능 : 2022 ~
+ * 사용가능 : 2023 ~
  */
 
 @Slf4j
@@ -52,6 +53,13 @@ public class ExceptionControllerAdvice {
         log.warn("Exception Name = {}, Code = 2004, Message = {}", ex.getClass().getName(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.builder().errorCode(2004).httpStatus(HttpStatus.BAD_REQUEST).build());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity httpMessageNotReadableExHandle(HttpMessageNotReadableException ex) {
+        log.warn("Exception Name = {}, Code = 2023, Message = {}", ex.getClass().getName(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(CommonResponse.builder().errorCode(2023).httpStatus(HttpStatus.BAD_REQUEST).build());
     }
 
     @ExceptionHandler

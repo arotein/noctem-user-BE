@@ -6,7 +6,7 @@ import noctem.userService.domain.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuQtyReqDto;
 import noctem.userService.domain.user.service.CartService;
 import noctem.userService.global.common.CommonResponse;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,18 +15,25 @@ import java.util.List;
 @RestController
 @RequestMapping("${global.api.base-path}/carts")
 @RequiredArgsConstructor
-@PostAuthorize("hasRole('USER')")
+@PreAuthorize("hasRole('USER')")
 public class CartController {
     private final CartService cartService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public CommonResponse getCartList() {
         return CommonResponse.builder()
                 .data(cartService.getCartList())
                 .build();
     }
 
-    @PostMapping("/")
+    @GetMapping("/qty")
+    public CommonResponse getCartTotalQty() {
+        return CommonResponse.builder()
+                .data(cartService.getCartTotalQty())
+                .build();
+    }
+
+    @PostMapping("")
     public CommonResponse addMenuToCart(@Validated @RequestBody AddMenuReqDto dto) {
         return CommonResponse.builder()
                 .data(cartService.addMenuToCart(dto))

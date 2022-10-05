@@ -18,8 +18,7 @@ public class AppConfig {
         return new Argon2PasswordEncoder();
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
+    public static ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 }

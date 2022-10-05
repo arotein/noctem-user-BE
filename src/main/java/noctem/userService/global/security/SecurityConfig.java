@@ -2,6 +2,7 @@ package noctem.userService.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import noctem.userService.AppConfig;
 import noctem.userService.global.security.filter.JwtRequestProcessingFilter;
 import noctem.userService.global.security.handler.JwtAuthenticationFailureHandler;
 import noctem.userService.global.security.handler.JwtAuthenticationSuccessHandler;
@@ -27,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler;
     private final JwtAuthenticationFailureHandler jwtAuthenticationFailureHandler;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = AppConfig.objectMapper();
     private final CorsFilter corsFilter;
 
     @Override

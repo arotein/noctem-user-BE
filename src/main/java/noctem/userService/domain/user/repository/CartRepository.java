@@ -10,6 +10,11 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     @EntityGraph(attributePaths = {"myPersonalOptionList", "userAccount"})
     List<Cart> findAllBySizeId(Long sizeId);
 
+    @EntityGraph(attributePaths = {"myPersonalOptionList"})
+    List<Cart> findAllByUserAccountId(Long userAccountId);
+
+    Long countByUserAccountId(Long userAccountId);
+
     @EntityGraph(attributePaths = {"myPersonalOptionList", "userAccount"})
     Cart findBySizeId(Long sizeId);
 }

@@ -34,7 +34,7 @@ public class Cart extends BaseEntity {
         this.qty = qty;
     }
 
-    public Cart linkToUser(UserAccount userAccount) {
+    public Cart linkToUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
         userAccount.linkToCart(this);
         return this;
@@ -54,6 +54,11 @@ public class Cart extends BaseEntity {
 
     public Cart changeQty(Integer qty) {
         this.qty = qty;
+        return this;
+    }
+
+    public Cart plusQty(Integer qty) {
+        this.qty += qty;
         return this;
     }
 }

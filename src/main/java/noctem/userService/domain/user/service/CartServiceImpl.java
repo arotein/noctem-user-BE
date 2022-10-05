@@ -3,6 +3,7 @@ package noctem.userService.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.domain.user.dto.request.AddMenuReqDto;
+import noctem.userService.domain.user.dto.MenuComparisonJsonDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuQtyReqDto;
 import noctem.userService.domain.user.dto.response.CartAndOptionsResDto;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,10 +39,32 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public Long getCartTotalQty() {
+        return clientInfoLoader.isAnonymous() ? 0 : cartRepository.countByUserAccountId(clientInfoLoader.getUserAccountId());
+    }
+
+    @Override
     public Boolean addMenuToCart(AddMenuReqDto dto) {
-        // 커스널 옵션까지 모두 같다 -> 수량 증가
-        // 커스널 옵션까지 모두 같지 않다 -> 새 객체 생성
-        return null;
+        List<Cart> cartList = cartRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
+        Map<String, Cart> cartMap = new HashMap<>();
+        cartList.forEach(e -> cartMap.put(new MenuComparisonJsonDto().cartAndOptionEntityToJson(e), e));
+        String dtoJson = new MenuComparisonJsonDto().reqDtoToJson(dto);
+        if (cartMap.containsKey(dtoJson)) {
+            // 이미 존재하는 메뉴 -> 수량만 추가
+            cartMap.get(dtoJson).plusQty(dto.getQuantity());
+        } else {
+            // 존재하지 않는 메뉴 -> 추가
+            Cart cart = Cart.builder().sizeId(dto.getSizeId()).qty(dto.getQuantity()).build();
+            cart.linkToUserAccount(userAccountRepository.getById(clientInfoLoader.getUserAccountId()));
+            dto.getPersonalOptionList().forEach(e ->
+                    cart.linkToMyPersonalOption(MyPersonalOption.builder()
+                            .personalOptionId(e.getOptionId())
+                            .amount(Amount.findByValue(e.getAmount()))
+                            .build())
+            );
+            cartRepository.save(cart);
+        }
+        return true;
     }
 
     @Override
