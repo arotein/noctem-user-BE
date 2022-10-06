@@ -10,7 +10,7 @@ import java.util.List;
 public interface CartService {
     List<CartListResDto> getCartList();
 
-    Long getCartTotalQty();
+    Integer getCartTotalQty();
 
     Boolean addMenuToCart(AddCartReqDto dto);
 

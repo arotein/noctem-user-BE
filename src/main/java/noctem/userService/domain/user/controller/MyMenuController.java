@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import noctem.userService.domain.user.dto.request.AddMyMenuReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMyMenuAliasReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMyMenuOrderReqDto;
+import noctem.userService.domain.user.dto.response.MyMenuListResDto;
 import noctem.userService.domain.user.service.MyMenuService;
 import noctem.userService.global.common.CommonResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("${global.api.base-path}/myMenu")
@@ -19,8 +22,10 @@ public class MyMenuController {
 
     @GetMapping("")
     public CommonResponse getMyMenuList() {
+        List<MyMenuListResDto> myMenuList = myMenuService.getMyMenuList();
+        myMenuList.forEach(e -> e.setIndex(myMenuList.indexOf(e)));
         return CommonResponse.builder()
-                .data(myMenuService.getMyMenuList())
+                .data(myMenuList)
                 .build();
     }
 

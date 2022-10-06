@@ -9,7 +9,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartAndOptionsReqServDto {
+public class MenuInfoReqServDto {
+    private Long cartOrMyMenuId;
     private Long sizeId;
     private List<Long> optionIdList;
 }

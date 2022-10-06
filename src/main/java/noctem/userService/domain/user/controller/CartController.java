@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import noctem.userService.domain.user.dto.request.AddCartReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.domain.user.dto.request.ChangeMenuQtyReqDto;
+import noctem.userService.domain.user.dto.response.CartListResDto;
 import noctem.userService.domain.user.service.CartService;
 import noctem.userService.global.common.CommonResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,8 +22,10 @@ public class CartController {
 
     @GetMapping("")
     public CommonResponse getCartList() {
+        List<CartListResDto> cartList = cartService.getCartList();
+        cartList.forEach(e -> e.setIndex(cartList.indexOf(e)));
         return CommonResponse.builder()
-                .data(cartService.getCartList())
+                .data(cartList)
                 .build();
     }
 
@@ -48,7 +51,7 @@ public class CartController {
                 .build();
     }
 
-    @PatchMapping("/{sizeId}/personalOptions")
+    @PutMapping("/{sizeId}/personalOptions")
     public CommonResponse changeMenuOption(@PathVariable Long sizeId,
                                            @Validated @RequestBody List<ChangeMenuOptionReqDto> dtoList) {
         return CommonResponse.builder()

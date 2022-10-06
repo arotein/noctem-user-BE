@@ -37,6 +37,7 @@ public class MyMenu extends BaseEntity {
     public MyMenu(Long sizeId, String alias) {
         this.sizeId = sizeId;
         this.alias = alias;
+        this.myMenuOrder = 0;
     }
 
     public MyMenu linkToUserAccount(UserAccount userAccount) {

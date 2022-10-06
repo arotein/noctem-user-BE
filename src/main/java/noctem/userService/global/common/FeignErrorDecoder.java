@@ -16,14 +16,15 @@ public class FeignErrorDecoder implements ErrorDecoder {
     @Override
     public CommonException decode(String methodKey, Response response) {
         try {
-            CommonRequest commonRequest = AppConfig.objectMapper().readValue(
+            CommonResponse commonResponse = AppConfig.objectMapper().readValue(
                     CharStreams.toString(response.body().asReader(Charset.defaultCharset())),
-                    CommonRequest.class);
+                    CommonResponse.class);
             return CommonException.builder()
-                    .errorCode(commonRequest.getErrorCode())
+                    .errorCode(commonResponse.getErrorCode())
                     .httpStatus(HttpStatus.valueOf(response.status()))
                     .build();
         } catch (Exception e) {
+            log.error("{}={}", e.getClass().getSimpleName(), e.getMessage());
             return CommonException.builder()
                     .errorCode(2021)
                     .httpStatus(HttpStatus.valueOf(response.status()))

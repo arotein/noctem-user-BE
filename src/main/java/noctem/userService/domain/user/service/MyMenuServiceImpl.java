@@ -17,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -36,15 +33,16 @@ public class MyMenuServiceImpl implements MyMenuService {
     @Override
     public List<MyMenuListResDto> getMyMenuList() {
         List<MyMenu> myMenuList = myMenuRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
-        List<MyMenuListResDto> data = menuFeignClient.getMyMenuListDtoList(myMenuList.stream()
-                        .map(e -> new MyMenuAndOptionsReqServDto(e.getSizeId(),
-                                e.getMyPersonalOptionList().stream()
-                                        .map(MyPersonalOption::getPersonalOptionId)
-                                        .collect(Collectors.toList())))
-                        .collect(Collectors.toList()))
-                .getData();
-        // MyMenuListResDto에 별칭 추가하는 로직 추가하여 리턴
-        return null;
+        myMenuList.sort(Comparator.comparingInt(MyMenu::getMyMenuOrder).thenComparing(MyMenu::getCreatedAt));
+        Map<Long, String> myMenuMap = myMenuList.stream().collect(Collectors.toMap(MyMenu::getId, MyMenu::getAlias));
+
+        List<MenuInfoResServDto> menuInfoList = myMenuList.stream().map(e -> menuFeignClient.getMenuInfoListDtoList(
+                e.getId(), e.getSizeId(), e.getMyPersonalOptionList().stream().map(MyPersonalOption::getId).collect(Collectors.toList())
+        ).getData()).collect(Collectors.toList());
+
+        return menuInfoList.stream().map(e -> new MyMenuListResDto(
+                null, myMenuMap.get(e.getCartOrMyMenuId()), e.getMenuName(), e.getMenuImg(), e.getTotalPrice(), new ArrayList<>()
+        )).collect(Collectors.toList());
     }
 
     @Override
@@ -93,10 +91,13 @@ public class MyMenuServiceImpl implements MyMenuService {
 
     // 요청한 myMenu가 본인 것이 맞는지 확인
     private MyMenu identificationMyMenu(Long myMenuId) {
-        MyMenu myMenu = myMenuRepository.getById(myMenuId);
-        if (!Objects.equals(myMenu.getUserAccount().getId(), clientInfoLoader.getUserAccountId())) {
+        Optional<MyMenu> optionalMyMenu = myMenuRepository.findById(myMenuId);
+        if (optionalMyMenu.isEmpty()) {
+            throw CommonException.builder().errorCode(2025).httpStatus(HttpStatus.BAD_REQUEST).build();
+        }
+        if (!Objects.equals(optionalMyMenu.get().getUserAccount().getId(), clientInfoLoader.getUserAccountId())) {
             throw CommonException.builder().errorCode(2001).httpStatus(HttpStatus.UNAUTHORIZED).build();
         }
-        return myMenu;
+        return optionalMyMenu.get();
     }
 }

@@ -6,14 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface CartRepository extends JpaRepository<Cart, Long>, QueryDslRepository {
     @EntityGraph(attributePaths = {"myPersonalOptionList", "userAccount"})
     List<Cart> findAllBySizeId(Long sizeId);
 
     @EntityGraph(attributePaths = {"myPersonalOptionList"})
     List<Cart> findAllByUserAccountId(Long userAccountId);
-
-    Long countByUserAccountId(Long userAccountId);
 
     @Override
     @EntityGraph(attributePaths = {"myPersonalOptionList", "userAccount"})
