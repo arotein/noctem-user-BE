@@ -1,14 +1,21 @@
 package noctem.userService.domain.user.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import noctem.userService.domain.user.entity.OptionalInfo;
 
 @Data
-@AllArgsConstructor
 public class OptionalInfoResDto {
     private Boolean isDarkmode;
     private Boolean pushNotificationAgreement;
     private Boolean advertisementAgreement;
     private Boolean useLocationInfoAgreement;
     private Boolean shakeToPay;
+
+    public OptionalInfoResDto(OptionalInfo optionalInfo) {
+        this.isDarkmode = optionalInfo.getIsDarkmode();
+        this.pushNotificationAgreement = optionalInfo.getPushNotificationAgreement();
+        this.advertisementAgreement = optionalInfo.getAdvertisementAgreement();
+        this.useLocationInfoAgreement = optionalInfo.getUseLocationInfoAgreement();
+        this.shakeToPay = optionalInfo.getShakeToPay();
+    }
 }

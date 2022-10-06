@@ -2,6 +2,8 @@ package noctem.userService.domain.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import noctem.userService.domain.user.entity.UserAccount;
+import noctem.userService.domain.user.entity.UserPrivacy;
 
 /***
  * email : 첫 3자리만 마스킹
@@ -21,6 +23,17 @@ public class UserPrivacyInfoResDto {
     private String birthdayDay;
     private String phoneNumber;
     private String nickname;
+
+    public UserPrivacyInfoResDto(UserAccount userAccount, UserPrivacy userPrivacy) {
+        this.email = userAccount.getEmail();
+        this.name = userPrivacy.getName();
+        this.sex = userPrivacy.getSex().getKoValue();
+        this.birthdayYear = userPrivacy.getBirthdayYear();
+        this.birthdayMonth = userPrivacy.getBirthdayMonth();
+        this.birthdayDay = userPrivacy.getBirthdayDay();
+        this.phoneNumber = userPrivacy.getPhoneNumber();
+        this.nickname = userAccount.getNickname();
+    }
 
     public UserPrivacyInfoResDto applyMasking() {
         // email masking

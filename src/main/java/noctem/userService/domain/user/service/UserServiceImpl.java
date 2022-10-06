@@ -109,16 +109,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserPrivacyInfoResDto getPrivacyInfo() {
         UserPrivacy userPrivacy = userPrivacyRepository.findByUserAccountId(clientInfoLoader.getUserAccountId());
-        UserAccount userAccount = userPrivacy.getUserAccount();
-        return new UserPrivacyInfoResDto(userAccount.getEmail(),
-                userPrivacy.getName(),
-                userPrivacy.getSex().getKoValue(),
-                userPrivacy.getBirthdayYear(),
-                userPrivacy.getBirthdayMonth(),
-                userPrivacy.getBirthdayDay(),
-                userPrivacy.getPhoneNumber(),
-                userAccount.getNickname())
-                .applyMasking();
+        return new UserPrivacyInfoResDto(userPrivacy.getUserAccount(), userPrivacy).applyMasking();
     }
 
     @Override
@@ -131,12 +122,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public OptionalInfoResDto getAllOptionalInfo() {
-        OptionalInfo optionalInfo = optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId());
-        return new OptionalInfoResDto(optionalInfo.getIsDarkmode(),
-                optionalInfo.getPushNotificationAgreement(),
-                optionalInfo.getAdvertisementAgreement(),
-                optionalInfo.getUseLocationInfoAgreement(),
-                optionalInfo.getShakeToPay());
+        return new OptionalInfoResDto(optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId()));
     }
 
     @Transactional(readOnly = true)

@@ -21,7 +21,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Boolean save(SearchReqDto dto) {
-        return searchRepository.save(Search.builder().query(dto.getQuery()).build().generateByUserAccountId(clientInfoLoader.getUserAccountId()));
+        return searchRepository.save(Search.builder().query(dto.getQuery()).build()
+                .generateByUserAccountId(clientInfoLoader.getUserAccountId()));
     }
 
     @Override
