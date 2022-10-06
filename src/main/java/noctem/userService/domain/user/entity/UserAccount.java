@@ -40,7 +40,7 @@ public class UserAccount extends BaseEntity {
     private Timestamp lastAccessTime;
 
     @Enumerated(EnumType.STRING)
-    private Grade grade = Grade.TALL;
+    private Grade grade = Grade.POTION;
     private Integer gradeAccumulateExp = 0;
 
     @Enumerated(EnumType.STRING)

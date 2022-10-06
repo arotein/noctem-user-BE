@@ -192,17 +192,17 @@ public class UserServiceImpl implements UserService {
         String nextGrade = null;
         Integer requiredExpToNextGrade = null;
         // 경험치 계산
-        if (userAccount.getGrade() == Grade.TALL) {
-            nextGrade = Grade.GRANDE.getValue();
+        if (userAccount.getGrade() == Grade.POTION) {
+            nextGrade = Grade.ELIXIR.getValue();
             userExp = userAccount.getGradeAccumulateExp() / Grade.divisionRatio;
-            requiredExpToNextGrade = Grade.GRANDE.getRequiredAccumulateExp() / Grade.divisionRatio;
+            requiredExpToNextGrade = Grade.ELIXIR.getRequiredAccumulateExp() / Grade.divisionRatio;
 
-        } else if (userAccount.getGrade() == Grade.GRANDE) {
-            nextGrade = Grade.VENTI.getValue();
-            userExp = (userAccount.getGradeAccumulateExp() - Grade.GRANDE.getRequiredAccumulateExp()) / Grade.divisionRatio;
-            requiredExpToNextGrade = (Grade.VENTI.getRequiredAccumulateExp() - Grade.GRANDE.getRequiredAccumulateExp()) / Grade.divisionRatio;
+        } else if (userAccount.getGrade() == Grade.ELIXIR) {
+            nextGrade = Grade.POWER_ELIXIR.getValue();
+            userExp = (userAccount.getGradeAccumulateExp() - Grade.ELIXIR.getRequiredAccumulateExp()) / Grade.divisionRatio;
+            requiredExpToNextGrade = (Grade.POWER_ELIXIR.getRequiredAccumulateExp() - Grade.ELIXIR.getRequiredAccumulateExp()) / Grade.divisionRatio;
         } else {
-            userExp = (userAccount.getGradeAccumulateExp() - Grade.VENTI.getRequiredAccumulateExp()) / Grade.divisionRatio;
+            userExp = (userAccount.getGradeAccumulateExp() - Grade.POWER_ELIXIR.getRequiredAccumulateExp()) / Grade.divisionRatio;
         }
 
         return new GradeAndRemainingExpResDto(userGrade, userExp, nextGrade, requiredExpToNextGrade);
