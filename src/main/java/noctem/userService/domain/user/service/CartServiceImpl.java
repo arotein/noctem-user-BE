@@ -35,6 +35,7 @@ public class CartServiceImpl implements CartService {
     private final ClientInfoLoader clientInfoLoader;
     private final MenuFeignClient menuFeignClient;
 
+    @Transactional(readOnly = true)
     @Override
     public List<CartListResDto> getCartList() {
         List<Cart> cartList = cartRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
@@ -49,6 +50,7 @@ public class CartServiceImpl implements CartService {
         )).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Integer getCartTotalQty() {
         return cartRepository.cartTotalQty(clientInfoLoader.getUserAccountId());

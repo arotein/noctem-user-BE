@@ -30,6 +30,7 @@ public class MyMenuServiceImpl implements MyMenuService {
     private final ClientInfoLoader clientInfoLoader;
     private final MenuFeignClient menuFeignClient;
 
+    @Transactional(readOnly = true)
     @Override
     public List<MyMenuListResDto> getMyMenuList() {
         List<MyMenu> myMenuList = myMenuRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
