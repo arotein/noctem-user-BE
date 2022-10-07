@@ -15,5 +15,7 @@ public class MenuInfoResServDto {
     private String menuName;
     private String menuEngName;
     private String menuImg;
+    private String temperature;
+    private String size;
     private Integer totalPrice;
 }

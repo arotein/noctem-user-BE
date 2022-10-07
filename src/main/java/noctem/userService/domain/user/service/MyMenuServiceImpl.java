@@ -42,8 +42,9 @@ public class MyMenuServiceImpl implements MyMenuService {
         ).getData()).collect(Collectors.toList());
 
         return menuInfoList.stream().map(e -> new MyMenuListResDto(
-                null, myMenuMap.get(e.getCartOrMyMenuId()), e.getMenuName(), e.getMenuImg(), e.getTotalPrice(), new ArrayList<>()
-        )).collect(Collectors.toList());
+                null, myMenuMap.get(e.getCartOrMyMenuId()), e.getMenuName(), e.getMenuImg(),
+                e.getTemperature(), e.getSize(), e.getTotalPrice(), new ArrayList<>()
+        ).changeTempAndSizeFormat()).collect(Collectors.toList());
     }
 
     @Override
