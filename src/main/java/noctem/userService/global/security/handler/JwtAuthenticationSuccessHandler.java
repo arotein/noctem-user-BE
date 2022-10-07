@@ -2,7 +2,7 @@ package noctem.userService.global.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import noctem.userService.domain.user.service.UserService;
+import noctem.userService.user.service.UserService;
 import noctem.userService.global.common.CommonResponse;
 import noctem.userService.global.security.auth.UserDetailsImpl;
 import noctem.userService.global.security.token.JwtAuthenticationToken;

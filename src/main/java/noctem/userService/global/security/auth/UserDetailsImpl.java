@@ -1,7 +1,7 @@
 package noctem.userService.global.security.auth;
 
 import lombok.Getter;
-import noctem.userService.domain.user.entity.UserAccount;
+import noctem.userService.user.domain.entity.UserAccount;
 import noctem.userService.global.security.dto.ClientInfoDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
