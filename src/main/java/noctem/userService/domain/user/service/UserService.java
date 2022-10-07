@@ -17,6 +17,8 @@ public interface UserService {
 
     Boolean isDarkmode();
 
+    Boolean getOrderMyMenuFromHome();
+
     Boolean changePushNotificationAgreement();
 
     Boolean changeAdvertisementAgreement();
@@ -26,6 +28,8 @@ public interface UserService {
     Boolean changeShakeToPay();
 
     Boolean changeDarkmode();
+
+    Boolean changeOrderMyMenuFromHome();
 
     UserPrivacyInfoResDto getPrivacyInfo();
 

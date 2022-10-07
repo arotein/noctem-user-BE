@@ -131,6 +131,12 @@ public class UserServiceImpl implements UserService {
         return optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId()).getIsDarkmode();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean getOrderMyMenuFromHome() {
+        return optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId()).getOrderMyMenuFromHome();
+    }
+
     @Override
     public Boolean changePushNotificationAgreement() {
         optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
@@ -163,6 +169,13 @@ public class UserServiceImpl implements UserService {
     public Boolean changeDarkmode() {
         optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
                 .changeDarkmode();
+        return true;
+    }
+
+    @Override
+    public Boolean changeOrderMyMenuFromHome() {
+        optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
+                .changeOrderMyMenuFromHome();
         return true;
     }
 

@@ -30,10 +30,24 @@ public class OptionalInfoController {
                 .build();
     }
 
+    @GetMapping("/orderHome")
+    public CommonResponse getOrderMyMenuFromHome() {
+        return CommonResponse.builder()
+                .data(userService.getOrderMyMenuFromHome())
+                .build();
+    }
+
     @PatchMapping("/darkmode")
     public CommonResponse changeDarkmode() {
         return CommonResponse.builder()
                 .data(userService.changeDarkmode())
+                .build();
+    }
+
+    @PatchMapping("/orderHome")
+    public CommonResponse changeOrderMyMenuFromHome() {
+        return CommonResponse.builder()
+                .data(userService.changeOrderMyMenuFromHome())
                 .build();
     }
 

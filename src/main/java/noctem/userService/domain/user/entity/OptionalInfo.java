@@ -24,6 +24,8 @@ public class OptionalInfo extends BaseEntity {
     private Boolean advertisementAgreement;
     private Boolean useLocationInfoAgreement;
     private Boolean shakeToPay;
+    private Boolean orderMyMenuFromHome;
+
 
     @JsonIgnore
     @OneToOne(mappedBy = "optionalInfo", fetch = FetchType.LAZY)
@@ -36,6 +38,7 @@ public class OptionalInfo extends BaseEntity {
         this.pushNotificationAgreement = false;
         this.useLocationInfoAgreement = false;
         this.shakeToPay = false;
+        this.orderMyMenuFromHome = false;
     }
 
     public OptionalInfo linkToUserAccount(UserAccount userAccount) {
@@ -65,6 +68,11 @@ public class OptionalInfo extends BaseEntity {
 
     public OptionalInfo changeShakeToPay() {
         this.shakeToPay = this.shakeToPay ? false : true;
+        return this;
+    }
+
+    public OptionalInfo changeOrderMyMenuFromHome() {
+        this.orderMyMenuFromHome = this.orderMyMenuFromHome ? false : true;
         return this;
     }
 }
