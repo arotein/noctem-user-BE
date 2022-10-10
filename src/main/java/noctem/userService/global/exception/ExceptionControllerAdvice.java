@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /***
  * errorCode: 2000~2999
- * 사용가능 : 2026 ~
+ * 사용가능 : 2027 ~
  */
 
 @Slf4j

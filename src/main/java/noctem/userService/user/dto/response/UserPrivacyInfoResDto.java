@@ -27,7 +27,7 @@ public class UserPrivacyInfoResDto {
     public UserPrivacyInfoResDto(UserAccount userAccount, UserPrivacy userPrivacy) {
         this.email = userAccount.getEmail();
         this.name = userPrivacy.getName();
-        this.sex = userPrivacy.getSex().getKoValue();
+        this.sex = userPrivacy.getSex().getValue();
         this.birthdayYear = userPrivacy.getBirthdayYear();
         this.birthdayMonth = userPrivacy.getBirthdayMonth();
         this.birthdayDay = userPrivacy.getBirthdayDay();
