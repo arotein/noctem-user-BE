@@ -69,7 +69,6 @@ logging:
     file: UTF-8
   level:
     root: info
-    org.hibernate.SQL: debug
 
 global:
   jwt-token:

@@ -9,12 +9,13 @@ import java.util.List;
 @AllArgsConstructor
 public class CartListResDto {
     private Integer index;
+    private Long sizeId;
     private String menuName;
     private String menuEngName;
     private String menuImg;
     private String temperature;
     private String size;
-    private Integer totalPrice; // 현재 퍼스널 옵션을 제외한 가격임
+    private Integer totalMenuPrice; // 현재 퍼스널 옵션을 제외한 가격임
     private Integer qty;
     private List<String> myPersonalOptionList;
 

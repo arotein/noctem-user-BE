@@ -10,11 +10,12 @@ import java.util.List;
 public class MyMenuListResDto {
     private Integer index;
     private String alias;
+    private Long sizeId;
     private String menuName;
     private String menuImg;
     private String temperature;
     private String size;
-    private Integer totalPrice; // 현재 퍼스널 옵션을 제외한 가격임
+    private Integer totalMenuPrice; // 현재 퍼스널 옵션을 제외한 가격임
     private List<String> myPersonalOptionList;
 
     public MyMenuListResDto changeTempAndSizeFormat() {

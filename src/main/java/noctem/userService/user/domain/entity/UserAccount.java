@@ -1,7 +1,10 @@
 package noctem.userService.user.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import noctem.userService.global.common.BaseEntity;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Grade;
@@ -9,7 +12,7 @@ import noctem.userService.global.enumeration.Role;
 import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +40,7 @@ public class UserAccount extends BaseEntity {
     @Column(unique = true)
     private String nickname;
 
-    private Timestamp lastAccessTime;
+    private LocalDateTime lastAccessTime;
 
     @Enumerated(EnumType.STRING)
     private Grade grade = Grade.POTION;
@@ -77,7 +80,7 @@ public class UserAccount extends BaseEntity {
     }
 
     public void updateLastAccessTime() {
-        this.lastAccessTime = new Timestamp(System.currentTimeMillis());
+        this.lastAccessTime = LocalDateTime.now();
     }
 
     public UserAccount linkToCart(Cart cart) {

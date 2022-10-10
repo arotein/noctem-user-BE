@@ -17,5 +17,5 @@ public class MenuInfoResServDto {
     private String menuImg;
     private String temperature;
     private String size;
-    private Integer totalPrice;
+    private Integer totalPrice; // 옵션을 제외한 메뉴가격
 }
