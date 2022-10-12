@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
         ).getData()).collect(Collectors.toList());
 
         return menuInfoList.stream().map(e -> new CartListResDto(
-                null, e.getSizeId(), e.getMenuName(), e.getMenuEngName(), e.getMenuImg(),
+                null, e.getCartOrMyMenuId(), e.getSizeId(), e.getMenuName(), e.getMenuEngName(), e.getMenuImg(),
                 e.getTemperature(), e.getSize(), e.getTotalPrice(),
                 cartMap.get(e.getCartOrMyMenuId()), new ArrayList<>()
         ).changeTempAndSizeFormat()).collect(Collectors.toList());

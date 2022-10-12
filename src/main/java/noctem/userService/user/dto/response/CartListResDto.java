@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CartListResDto {
     private Integer index;
+    private Long cartId;
     private Long sizeId;
     private String menuName;
     private String menuEngName;

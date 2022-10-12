@@ -10,6 +10,7 @@ import java.util.List;
 public class MyMenuListResDto {
     private Integer index;
     private String alias;
+    private Long myMenuId;
     private Long sizeId;
     private String menuName;
     private String menuImg;
