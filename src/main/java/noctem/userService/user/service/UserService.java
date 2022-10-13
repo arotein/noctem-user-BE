@@ -4,6 +4,7 @@ import noctem.userService.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.user.dto.request.SignUpReqDto;
 import noctem.userService.user.dto.response.GradeAndRemainingExpResDto;
 import noctem.userService.user.dto.response.OptionalInfoResDto;
+import noctem.userService.user.dto.response.UserAccountInfoResDto;
 import noctem.userService.user.dto.response.UserPrivacyInfoResDto;
 
 public interface UserService {
@@ -36,6 +37,8 @@ public interface UserService {
     Boolean changeNickname(ChangeNicknameReqDto dto);
 
     GradeAndRemainingExpResDto getGradeAndRemainingExp();
+
+    UserAccountInfoResDto getPurchaseUserAccountInfo(Long userAccountId);
 
     void updateLastAccessTime(Long id);
 }

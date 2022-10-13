@@ -7,14 +7,12 @@ import noctem.userService.global.enumeration.Amount;
 import noctem.userService.global.security.bean.ClientInfoLoader;
 import noctem.userService.user.domain.entity.MyMenu;
 import noctem.userService.user.domain.entity.MyPersonalOption;
-import noctem.userService.user.domain.feignClient.MenuFeignClient;
 import noctem.userService.user.domain.repository.MyMenuRepository;
 import noctem.userService.user.domain.repository.UserAccountRepository;
 import noctem.userService.user.dto.MenuComparisonJsonDto;
 import noctem.userService.user.dto.request.AddMyMenuReqDto;
 import noctem.userService.user.dto.request.ChangeMyMenuAliasReqDto;
 import noctem.userService.user.dto.request.ChangeMyMenuOrderReqDto;
-import noctem.userService.user.dto.request.MenuInfoResServDto;
 import noctem.userService.user.dto.response.MyMenuListResDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,23 +29,12 @@ public class MyMenuServiceImpl implements MyMenuService {
     private final UserAccountRepository userAccountRepository;
     private final MyMenuRepository myMenuRepository;
     private final ClientInfoLoader clientInfoLoader;
-    private final MenuFeignClient menuFeignClient;
 
     @Transactional(readOnly = true)
     @Override
     public List<MyMenuListResDto> getMyMenuList() {
         List<MyMenu> myMenuList = myMenuRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
-        myMenuList.sort(Comparator.comparingInt(MyMenu::getMyMenuOrder).thenComparing(MyMenu::getCreatedAt));
-        Map<Long, String> myMenuMap = myMenuList.stream().collect(Collectors.toMap(MyMenu::getId, MyMenu::getAlias));
-
-        List<MenuInfoResServDto> menuInfoList = myMenuList.stream().map(e -> menuFeignClient.getMenuInfoListDtoList(
-                e.getId(), e.getSizeId(), e.getMyPersonalOptionList().stream().map(MyPersonalOption::getId).collect(Collectors.toList())
-        ).getData()).collect(Collectors.toList());
-
-        return menuInfoList.stream().map(e -> new MyMenuListResDto(
-                null, myMenuMap.get(e.getCartOrMyMenuId()), e.getCartOrMyMenuId(), e.getSizeId(), e.getMenuName(), e.getMenuImg(),
-                e.getTemperature(), e.getSize(), e.getTotalPrice(), new ArrayList<>()
-        ).changeTempAndSizeFormat()).collect(Collectors.toList());
+        return myMenuList.stream().map(MyMenuListResDto::new).collect(Collectors.toList());
     }
 
     @Override

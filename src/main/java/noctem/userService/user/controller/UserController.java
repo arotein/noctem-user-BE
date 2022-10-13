@@ -58,4 +58,11 @@ public class UserController {
                 .data(userService.getGradeAndRemainingExp())
                 .build();
     }
+
+    @GetMapping("/userAccount/info/{userAccountId}")
+    public CommonResponse getPurchaseUserAccountInfo(@PathVariable Long userAccountId) {
+        return CommonResponse.builder()
+                .data(userService.getPurchaseUserAccountInfo(userAccountId))
+                .build();
+    }
 }

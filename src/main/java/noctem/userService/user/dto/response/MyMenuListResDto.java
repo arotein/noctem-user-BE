@@ -2,26 +2,24 @@ package noctem.userService.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import noctem.userService.user.domain.entity.MyMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class MyMenuListResDto {
     private Integer index;
-    private String alias;
     private Long myMenuId;
+    private String alias;
     private Long sizeId;
-    private String menuName;
-    private String menuImg;
-    private String temperature;
-    private String size;
-    private Integer totalMenuPrice; // 현재 퍼스널 옵션을 제외한 가격임
     private List<String> myPersonalOptionList;
 
-    public MyMenuListResDto changeTempAndSizeFormat() {
-        temperature = temperature.toUpperCase();
-        size = size.substring(0, 1).toUpperCase() + size.substring(1).toLowerCase();
-        return this;
+    public MyMenuListResDto(MyMenu myMenu) {
+        this.myMenuId = myMenu.getId();
+        this.alias = myMenu.getAlias();
+        this.sizeId = myMenu.getSizeId();
+        this.myPersonalOptionList = new ArrayList<>();
     }
 }

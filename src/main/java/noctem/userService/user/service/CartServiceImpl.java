@@ -2,21 +2,19 @@ package noctem.userService.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import noctem.userService.global.common.CommonException;
+import noctem.userService.global.enumeration.Amount;
+import noctem.userService.global.security.bean.ClientInfoLoader;
+import noctem.userService.user.domain.entity.Cart;
+import noctem.userService.user.domain.entity.MyPersonalOption;
+import noctem.userService.user.domain.repository.CartRepository;
+import noctem.userService.user.domain.repository.MyPersonalOptionRepository;
+import noctem.userService.user.domain.repository.UserAccountRepository;
 import noctem.userService.user.dto.MenuComparisonJsonDto;
 import noctem.userService.user.dto.request.AddCartReqDto;
 import noctem.userService.user.dto.request.ChangeMenuOptionReqDto;
 import noctem.userService.user.dto.request.ChangeMenuQtyReqDto;
-import noctem.userService.user.dto.request.MenuInfoResServDto;
 import noctem.userService.user.dto.response.CartListResDto;
-import noctem.userService.user.domain.entity.Cart;
-import noctem.userService.user.domain.entity.MyPersonalOption;
-import noctem.userService.user.domain.feignClient.MenuFeignClient;
-import noctem.userService.user.domain.repository.CartRepository;
-import noctem.userService.user.domain.repository.MyPersonalOptionRepository;
-import noctem.userService.user.domain.repository.UserAccountRepository;
-import noctem.userService.global.common.CommonException;
-import noctem.userService.global.enumeration.Amount;
-import noctem.userService.global.security.bean.ClientInfoLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,23 +31,12 @@ public class CartServiceImpl implements CartService {
     private final MyPersonalOptionRepository myPersonalOptionRepository;
     private final CartRepository cartRepository;
     private final ClientInfoLoader clientInfoLoader;
-    private final MenuFeignClient menuFeignClient;
 
     @Transactional(readOnly = true)
     @Override
     public List<CartListResDto> getCartList() {
         List<Cart> cartList = cartRepository.findAllByUserAccountId(clientInfoLoader.getUserAccountId());
-        Map<Long, Integer> cartMap = cartList.stream().collect(Collectors.toMap(Cart::getId, Cart::getQty));
-
-        List<MenuInfoResServDto> menuInfoList = cartList.stream().map(e -> menuFeignClient.getMenuInfoListDtoList(
-                e.getId(), e.getSizeId(), e.getMyPersonalOptionList().stream().map(MyPersonalOption::getId).collect(Collectors.toList())
-        ).getData()).collect(Collectors.toList());
-
-        return menuInfoList.stream().map(e -> new CartListResDto(
-                null, e.getCartOrMyMenuId(), e.getSizeId(), e.getMenuName(), e.getMenuEngName(), e.getMenuImg(),
-                e.getTemperature(), e.getSize(), e.getTotalPrice(),
-                cartMap.get(e.getCartOrMyMenuId()), new ArrayList<>()
-        ).changeTempAndSizeFormat()).collect(Collectors.toList());
+        return cartList.stream().map(CartListResDto::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

@@ -2,11 +2,9 @@ package noctem.userService.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import noctem.userService.user.dto.request.ChangeNicknameReqDto;
-import noctem.userService.user.dto.request.SignUpReqDto;
-import noctem.userService.user.dto.response.GradeAndRemainingExpResDto;
-import noctem.userService.user.dto.response.OptionalInfoResDto;
-import noctem.userService.user.dto.response.UserPrivacyInfoResDto;
+import noctem.userService.global.common.CommonException;
+import noctem.userService.global.enumeration.Grade;
+import noctem.userService.global.security.bean.ClientInfoLoader;
 import noctem.userService.user.domain.entity.OptionalInfo;
 import noctem.userService.user.domain.entity.RequiredInfo;
 import noctem.userService.user.domain.entity.UserAccount;
@@ -14,10 +12,12 @@ import noctem.userService.user.domain.entity.UserPrivacy;
 import noctem.userService.user.domain.repository.OptionalInfoRepository;
 import noctem.userService.user.domain.repository.UserAccountRepository;
 import noctem.userService.user.domain.repository.UserPrivacyRepository;
-import noctem.userService.global.common.CommonException;
-import noctem.userService.global.enumeration.Grade;
-import noctem.userService.global.enumeration.Sex;
-import noctem.userService.global.security.bean.ClientInfoLoader;
+import noctem.userService.user.dto.request.ChangeNicknameReqDto;
+import noctem.userService.user.dto.request.SignUpReqDto;
+import noctem.userService.user.dto.response.GradeAndRemainingExpResDto;
+import noctem.userService.user.dto.response.OptionalInfoResDto;
+import noctem.userService.user.dto.response.UserAccountInfoResDto;
+import noctem.userService.user.dto.response.UserPrivacyInfoResDto;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,28 +39,6 @@ public class UserServiceImpl implements UserService {
     public Boolean signUp(SignUpReqDto dto) {
         // dto validate
         dto.dataformatMatching();
-        // 성별 변환
-        Sex sex;
-        switch (dto.getRrnBackFirst()) {
-            case "1":
-            case "3":
-            case "5":
-            case "7":
-                sex = Sex.MALE;
-                break;
-            case "2":
-            case "4":
-            case "6":
-            case "8":
-                sex = Sex.FEMALE;
-                break;
-            default:
-                throw CommonException.builder().errorCode(2011).httpStatus(HttpStatus.BAD_REQUEST).build();
-        }
-        // 생년월일 변환
-        String rrnYear = dto.getRrnFront().substring(0, 2);
-        String rrnMonth = dto.getRrnFront().substring(2, 4);
-        String rrnDay = dto.getRrnFront().substring(4);
 
         UserAccount userAccount = UserAccount.builder()
                 .email(dto.getEmail())
@@ -73,7 +51,7 @@ public class UserServiceImpl implements UserService {
                 .birthdayYear(dto.getRrnFront().substring(0, 2))
                 .birthdayMonth(dto.getRrnFront().substring(2, 4))
                 .birthdayDay(dto.getRrnFront().substring(4))
-                .sex(sex)
+                .rrnBackFirst(dto.getRrnBackFirst())
                 .build();
 
         RequiredInfo requiredInfo = RequiredInfo.builder()
@@ -205,6 +183,13 @@ public class UserServiceImpl implements UserService {
         }
 
         return new GradeAndRemainingExpResDto(userGrade, userExp, nextGrade, requiredExpToNextGrade);
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Override
+    public UserAccountInfoResDto getPurchaseUserAccountInfo(Long userAccountId) {
+        UserAccount userAccount = userAccountRepository.findById(userAccountId).get();
+        return new UserAccountInfoResDto(userAccount.getUserPrivacy().getSex(), userAccount.getUserPrivacy().getTodayUserAge());
     }
 
     @Modifying(clearAutomatically = true)
