@@ -187,9 +187,9 @@ public class UserServiceImpl implements UserService {
 
     @Modifying(clearAutomatically = true)
     @Override
-    public UserAccountInfoResDto getPurchaseUserAccountInfo(Long userAccountId) {
-        UserAccount userAccount = userAccountRepository.findById(userAccountId).get();
-        return new UserAccountInfoResDto(userAccount.getUserPrivacy().getSex(), userAccount.getUserPrivacy().getTodayUserAge());
+    public UserAccountInfoResDto getPurchaseUserAccountInfo() {
+        UserPrivacy userPrivacy = userPrivacyRepository.findByUserAccountId(clientInfoLoader.getUserAccountId());
+        return new UserAccountInfoResDto(userPrivacy.getTodayUserAge(), userPrivacy.getSex().getValue());
     }
 
     @Modifying(clearAutomatically = true)

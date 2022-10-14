@@ -38,7 +38,7 @@ public interface UserService {
 
     GradeAndRemainingExpResDto getGradeAndRemainingExp();
 
-    UserAccountInfoResDto getPurchaseUserAccountInfo(Long userAccountId);
+    UserAccountInfoResDto getPurchaseUserAccountInfo();
 
     void updateLastAccessTime(Long id);
 }

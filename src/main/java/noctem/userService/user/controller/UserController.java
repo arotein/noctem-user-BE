@@ -59,10 +59,10 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/userAccount/info/{userAccountId}")
-    public CommonResponse getPurchaseUserAccountInfo(@PathVariable Long userAccountId) {
+    @GetMapping("/userAccount/info")
+    public CommonResponse getPurchaseUserAccountInfo() {
         return CommonResponse.builder()
-                .data(userService.getPurchaseUserAccountInfo(userAccountId))
+                .data(userService.getPurchaseUserAccountInfo())
                 .build();
     }
 }
