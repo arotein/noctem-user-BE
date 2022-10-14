@@ -43,9 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/api/user-service/**").permitAll();
+                .antMatchers("${global.api.base-path}/**").permitAll();
 
-        http.addFilterAfter(new JwtRequestProcessingFilter("/api/user-service/*"), SecurityContextPersistenceFilter.class);
+        http.addFilterAfter(new JwtRequestProcessingFilter("${global.api.base-path}/*"), SecurityContextPersistenceFilter.class);
         http.addFilterBefore(corsFilter, SecurityContextPersistenceFilter.class);
         applyJwtConfigurer(http);
     }
