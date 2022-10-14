@@ -18,7 +18,6 @@ import noctem.userService.user.dto.response.GradeAndRemainingExpResDto;
 import noctem.userService.user.dto.response.OptionalInfoResDto;
 import noctem.userService.user.dto.response.UserAccountInfoResDto;
 import noctem.userService.user.dto.response.UserPrivacyInfoResDto;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -185,14 +184,13 @@ public class UserServiceImpl implements UserService {
         return new GradeAndRemainingExpResDto(userGrade, userExp, nextGrade, requiredExpToNextGrade);
     }
 
-    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = true)
     @Override
     public UserAccountInfoResDto getPurchaseUserAccountInfo() {
         UserPrivacy userPrivacy = userPrivacyRepository.findByUserAccountId(clientInfoLoader.getUserAccountId());
         return new UserAccountInfoResDto(userPrivacy.getTodayUserAge(), userPrivacy.getSex().getValue());
     }
 
-    @Modifying(clearAutomatically = true)
     @Override
     public void updateLastAccessTime(Long userAccountId) {
         userAccountRepository.findById(userAccountId).get().updateLastAccessTime();
