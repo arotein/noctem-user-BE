@@ -19,7 +19,7 @@ public class ClientInfoLoader {
 
     public Long getUserAccountId() {
         if (getClientUser() != null) {
-            return getClientUser().getId();
+            return getClientUser().getUserAccountId();
         }
         return null;
     }
@@ -38,7 +38,21 @@ public class ClientInfoLoader {
         return null;
     }
 
-    public Role getUserRole() {
+    public Long getStoreAccountId() {
+        if (getClientUser() != null) {
+            return getClientUser().getStoreAccountId();
+        }
+        return null;
+    }
+
+    public Long getStoreId() {
+        if (getClientUser() != null) {
+            return getClientUser().getStoreId();
+        }
+        return null;
+    }
+
+    public Role getClientRole() {
         if (getClientUser() != null) {
             return getClientUser().getRole();
         }

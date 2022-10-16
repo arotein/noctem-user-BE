@@ -116,6 +116,20 @@ public class UserAccount extends BaseEntity {
         return this;
     }
 
+    public Grade increaseAndGetGradeExp(Integer exp) {
+        gradeAccumulateExp += exp;
+        if (Grade.POTION == grade) {
+            if (gradeAccumulateExp >= Grade.ELIXIR.getRequiredAccumulateExp()) {
+                grade = Grade.ELIXIR;
+            }
+        } else if (Grade.ELIXIR == grade) {
+            if (gradeAccumulateExp >= Grade.POWER_ELIXIR.getRequiredAccumulateExp()) {
+                grade = Grade.ELIXIR;
+            }
+        }
+        return grade;
+    }
+
     private String nicknameFormatMatching(String nickname) {
         if (nickname == null || !nickname.matches("^[가-힣]{2,8}$")) {
             throw CommonException.builder().errorCode(2013).httpStatus(HttpStatus.BAD_REQUEST).build();

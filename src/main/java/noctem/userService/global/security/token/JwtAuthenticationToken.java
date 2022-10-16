@@ -22,6 +22,8 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public static final String JWT_USER_ID = "id";
     public static final String JWT_NICKNAME = "nickname";
     public static final String JWT_EMAIL = "email";
+    public static final String JWT_STORE_ACCOUNT_ID = "storeAccountId";
+    public static final String JWT_STORE_ID = "storeId";
     public static final String JWT_ROLE = "role";
     public static final String JWT_LOGIN_DTTM = "loginDateTime";
 
@@ -46,7 +48,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         HMACSigner secretKey = HMACSigner.newSHA256Signer(JWT_SIGNER);
         JWT rawJwt = new JWT()
                 .setIssuer(JWT_ISSUER)
-                .addClaim(JWT_USER_ID, clientInfoDto.getId())
+                .addClaim(JWT_USER_ID, clientInfoDto.getUserAccountId())
                 .addClaim(JWT_NICKNAME, clientInfoDto.getNickname())
                 .addClaim(JWT_EMAIL, clientInfoDto.getEmail())
                 .addClaim(JWT_ROLE, clientInfoDto.getRole())

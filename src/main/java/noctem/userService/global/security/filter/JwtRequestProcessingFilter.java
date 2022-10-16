@@ -59,13 +59,22 @@ public class JwtRequestProcessingFilter extends AbstractAuthenticationProcessing
                 }
                 ClientInfoDto clientInfoDto = new ClientInfoDto();
 
-                clientInfoDto.setId(Long.parseLong(allClaims.get(JwtAuthenticationToken.JWT_USER_ID).toString()));
-                clientInfoDto.setNickname(allClaims.get(JwtAuthenticationToken.JWT_NICKNAME).toString());
-                if (allClaims.get(JwtAuthenticationToken.JWT_EMAIL) != null) {
-                    clientInfoDto.setEmail(allClaims.get(JwtAuthenticationToken.JWT_EMAIL).toString());
+                // store token일 경우
+                if (allClaims.get(JwtAuthenticationToken.JWT_ROLE).toString().equals(Role.ROLE_STORE.toString())) {
+                    clientInfoDto.setStoreAccountId(Long.parseLong(allClaims.get(JwtAuthenticationToken.JWT_STORE_ACCOUNT_ID).toString()));
+                    clientInfoDto.setStoreId(Long.parseLong(allClaims.get(JwtAuthenticationToken.JWT_STORE_ID).toString()));
+                    clientInfoDto.setRole(Role.ROLE_STORE);
                 }
+                // user token일 경우
                 if (allClaims.get(JwtAuthenticationToken.JWT_ROLE).toString().equals(Role.ROLE_USER.toString())) {
+                    clientInfoDto.setUserAccountId(Long.parseLong(allClaims.get(JwtAuthenticationToken.JWT_STORE_ACCOUNT_ID).toString()));
                     clientInfoDto.setRole(Role.ROLE_USER);
+
+                    clientInfoDto.setUserAccountId(Long.parseLong(allClaims.get(JwtAuthenticationToken.JWT_USER_ID).toString()));
+                    clientInfoDto.setNickname(allClaims.get(JwtAuthenticationToken.JWT_NICKNAME).toString());
+                    if (allClaims.get(JwtAuthenticationToken.JWT_EMAIL) != null) {
+                        clientInfoDto.setEmail(allClaims.get(JwtAuthenticationToken.JWT_EMAIL).toString());
+                    }
                 }
 
                 List<GrantedAuthority> roles = new ArrayList<>();
