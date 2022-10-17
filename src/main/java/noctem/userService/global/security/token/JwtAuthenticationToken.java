@@ -19,7 +19,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public static final String JWT_HEADER = "Authorization";
     public static final String JWT_SIGNER = System.getenv("NOCTEM_JWT_SIGNER");
     public static final String JWT_ISSUER = "Cafe Noctem";
-    public static final String JWT_USER_ID = "id";
+    public static final String JWT_USER_ACCOUNT_ID = "userAccountId";
     public static final String JWT_NICKNAME = "nickname";
     public static final String JWT_EMAIL = "email";
     public static final String JWT_STORE_ACCOUNT_ID = "storeAccountId";
@@ -48,7 +48,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         HMACSigner secretKey = HMACSigner.newSHA256Signer(JWT_SIGNER);
         JWT rawJwt = new JWT()
                 .setIssuer(JWT_ISSUER)
-                .addClaim(JWT_USER_ID, clientInfoDto.getUserAccountId())
+                .addClaim(JWT_USER_ACCOUNT_ID, clientInfoDto.getUserAccountId())
                 .addClaim(JWT_NICKNAME, clientInfoDto.getNickname())
                 .addClaim(JWT_EMAIL, clientInfoDto.getEmail())
                 .addClaim(JWT_ROLE, clientInfoDto.getRole())

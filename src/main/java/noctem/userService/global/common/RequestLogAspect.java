@@ -25,9 +25,10 @@ public class RequestLogAspect {
         Object target = joinPoint.getTarget();
         if (clientInfoLoader.isAnonymous() == true) {
             log.info("[ANONYMOUS] {} {} {}", request.getMethod(), request.getRequestURI(), target.getClass().getSimpleName());
-        } else {
-            log.info("[{} {}] {} {}", clientInfoLoader.getUserAccountId(), clientInfoLoader.getUserNickname(), request.getMethod(), request.getRequestURI());
-            log.info("[{}] {} {} {}", clientInfoLoader.getUserAccountId(), clientInfoLoader.getUserNickname(), clientInfoLoader.getClientRole(), clientInfoLoader.getUserEmail());
+        } else if (clientInfoLoader.isUser()) {
+            log.info("[USER]({} {}) {} {}", clientInfoLoader.getUserAccountId(), clientInfoLoader.getUserNickname(), request.getMethod(), request.getRequestURI());
+        } else if (clientInfoLoader.isStore()) {
+            log.info("[STORE](accountId={} storeId={}) {} {}", clientInfoLoader.getStoreAccountId(), clientInfoLoader.getStoreId(), request.getMethod(), request.getRequestURI());
         }
         return joinPoint.proceed();
     }

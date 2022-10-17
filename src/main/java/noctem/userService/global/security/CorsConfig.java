@@ -18,7 +18,8 @@ public class CorsConfig {
         config.setExposedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
         // AllowCredentials이 true일 때 AllowedOrigin 사용못하므로 AllowedOriginPattern으로 대체
-        config.addAllowedOriginPattern("*");
+//        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "https://noctem-user1-fe.vercel.app"));
+        config.setAllowedOriginPatterns(Arrays.asList("*"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
         source.registerCorsConfiguration("/api/**", config);

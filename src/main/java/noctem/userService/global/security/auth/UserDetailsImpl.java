@@ -22,12 +22,12 @@ public class UserDetailsImpl implements UserDetails {
         this.email = userAccount.getEmail();
         this.password = userAccount.getPassword();
         this.authorities = (List<GrantedAuthority>) authorities;
-        this.clientInfoDto = new ClientInfoDto(userAccount.getId(),
-                userAccount.getNickname(),
-                userAccount.getEmail(),
-                null,
-                null,
-                userAccount.getRole());
+        this.clientInfoDto = ClientInfoDto.builder()
+                .userAccountId(userAccount.getId())
+                .nickname(userAccount.getNickname())
+                .email(userAccount.getEmail())
+                .role(userAccount.getRole())
+                .build();
     }
 
     public UserDetailsImpl(ClientInfoDto clientInfoDto, Collection<? extends GrantedAuthority> authorities) {
