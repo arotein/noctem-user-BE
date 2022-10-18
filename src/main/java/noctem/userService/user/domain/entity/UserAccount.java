@@ -118,14 +118,11 @@ public class UserAccount extends BaseEntity {
 
     public Grade increaseAndGetGradeExp(Integer exp) {
         gradeAccumulateExp += exp;
-        if (Grade.POTION == grade) {
-            if (gradeAccumulateExp >= Grade.ELIXIR.getRequiredAccumulateExp()) {
-                grade = Grade.ELIXIR;
-            }
-        } else if (Grade.ELIXIR == grade) {
-            if (gradeAccumulateExp >= Grade.POWER_ELIXIR.getRequiredAccumulateExp()) {
-                grade = Grade.ELIXIR;
-            }
+        if (Grade.ELIXIR.getRequiredAccumulateExp() <= gradeAccumulateExp
+                && gradeAccumulateExp < Grade.POWER_ELIXIR.getRequiredAccumulateExp()) {
+            grade = Grade.ELIXIR;
+        } else if (Grade.POWER_ELIXIR.getRequiredAccumulateExp() <= gradeAccumulateExp) {
+            grade = Grade.POWER_ELIXIR;
         }
         return grade;
     }
