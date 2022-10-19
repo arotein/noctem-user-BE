@@ -2,10 +2,9 @@ package noctem.userService.user.service;
 
 import noctem.userService.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.user.dto.request.SignUpReqDto;
-import noctem.userService.user.dto.response.GradeAndRemainingExpResDto;
-import noctem.userService.user.dto.response.OptionalInfoResDto;
-import noctem.userService.user.dto.response.UserAccountInfoResDto;
-import noctem.userService.user.dto.response.UserPrivacyInfoResDto;
+import noctem.userService.user.dto.response.*;
+
+import java.util.List;
 
 public interface UserService {
     Boolean signUp(SignUpReqDto dto);
@@ -41,4 +40,6 @@ public interface UserService {
     UserAccountInfoResDto getPurchaseUserAccountInfo();
 
     void updateLastAccessTime(Long id);
+
+    List<RankingResDto> getRanking();
 }

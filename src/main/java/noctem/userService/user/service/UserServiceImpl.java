@@ -14,14 +14,14 @@ import noctem.userService.user.domain.repository.UserAccountRepository;
 import noctem.userService.user.domain.repository.UserPrivacyRepository;
 import noctem.userService.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.user.dto.request.SignUpReqDto;
-import noctem.userService.user.dto.response.GradeAndRemainingExpResDto;
-import noctem.userService.user.dto.response.OptionalInfoResDto;
-import noctem.userService.user.dto.response.UserAccountInfoResDto;
-import noctem.userService.user.dto.response.UserPrivacyInfoResDto;
+import noctem.userService.user.dto.response.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -91,8 +91,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean changeNickname(ChangeNicknameReqDto dto) {
-        userAccountRepository.findById(clientInfoLoader.getUserAccountId())
-                .get().changeNickname(dto.getNickname());
+        userAccountRepository.findById(clientInfoLoader.getUserAccountId()).get()
+                .changeNickname(dto.getNickname());
         return true;
     }
 
@@ -105,13 +105,15 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Boolean isDarkmode() {
-        return optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId()).getIsDarkmode();
+        return optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
+                .getIsDarkmode();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Boolean getOrderMyMenuFromHome() {
-        return optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId()).getOrderMyMenuFromHome();
+        return optionalInfoRepository.findByUserAccountId(clientInfoLoader.getUserAccountId())
+                .getOrderMyMenuFromHome();
     }
 
     @Override
@@ -194,5 +196,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateLastAccessTime(Long userAccountId) {
         userAccountRepository.findById(userAccountId).get().updateLastAccessTime();
+    }
+
+    @Override
+    public List<RankingResDto> getRanking() {
+        List<RankingResDto> dtoList = userAccountRepository.findTop100ByOrderByGradeAccumulateExpDesc()
+                .stream().map(RankingResDto::new).collect(Collectors.toList());
+        dtoList.forEach(e -> e.setRank(dtoList.indexOf(e) + 1));
+        return dtoList;
     }
 }

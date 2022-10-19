@@ -3,11 +3,14 @@ package noctem.userService.user.controller;
 import lombok.RequiredArgsConstructor;
 import noctem.userService.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.user.dto.request.SignUpReqDto;
+import noctem.userService.user.dto.response.RankingResDto;
 import noctem.userService.user.service.UserService;
 import noctem.userService.global.common.CommonResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("${global.api.base-path}")
@@ -63,6 +66,15 @@ public class UserController {
     public CommonResponse getPurchaseUserAccountInfo() {
         return CommonResponse.builder()
                 .data(userService.getPurchaseUserAccountInfo())
+                .build();
+    }
+
+    @GetMapping("/ranking")
+    public CommonResponse ranking() {
+        List<RankingResDto> dtoList = userService.getRanking();
+        dtoList.forEach(e -> e.setIndex(dtoList.indexOf(e)));
+        return CommonResponse.builder()
+                .data(dtoList)
                 .build();
     }
 }
