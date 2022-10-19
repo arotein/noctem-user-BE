@@ -77,12 +77,12 @@ public class UserPrivacy extends BaseEntity {
             userYear += 1800;
         }
 
-        int age = todayYear - userYear;
+        int age = todayYear - userYear - 1;
 
         if (Integer.parseInt(birthdayMonth) < todayMonth) {
-            age--;
-        } else if (Integer.parseInt(birthdayMonth) == todayMonth && Integer.parseInt(birthdayDay) < todayDay) {
-            age--;
+            age++;
+        } else if (Integer.parseInt(birthdayMonth) == todayMonth && Integer.parseInt(birthdayDay) <= todayDay) {
+            age++;
         }
 
         return age;
