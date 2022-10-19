@@ -19,8 +19,11 @@ import java.text.SimpleDateFormat;
 public class SignUpReqDto {
     @NotBlank
     private String name;
+    @NotBlank
     private String nickname;
+    @NotBlank
     private String rrnFront;
+    @NotBlank
     private String rrnBackFirst;
     @Email
     private String email;
