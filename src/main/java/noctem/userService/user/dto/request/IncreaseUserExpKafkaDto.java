@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Min;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class IncreaseUserExpKafkaDto {
-    @NotBlank
+    @Min(1)
     private Long userAccountId;
-    @NotBlank
+    @Min(0)
     private Integer purchaseTotalPrice;
 }

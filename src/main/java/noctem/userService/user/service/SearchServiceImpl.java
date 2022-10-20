@@ -2,10 +2,9 @@ package noctem.userService.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import noctem.userService.user.dto.request.SearchReqDto;
-import noctem.userService.user.domain.entity.Search;
-import noctem.userService.user.domain.repository.SearchRepository;
 import noctem.userService.global.security.bean.ClientInfoLoader;
+import noctem.userService.user.domain.repository.SearchRepository;
+import noctem.userService.user.dto.request.SearchReqDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +20,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Boolean save(SearchReqDto dto) {
-        return searchRepository.save(Search.builder().query(dto.getQuery()).build()
-                .generateByUserAccountId(clientInfoLoader.getUserAccountId()));
+        return searchRepository.save(clientInfoLoader.getUserAccountId(), dto.getQuery());
     }
 
     @Override

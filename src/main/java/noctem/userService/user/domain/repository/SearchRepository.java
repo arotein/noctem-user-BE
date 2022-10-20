@@ -1,11 +1,9 @@
 package noctem.userService.user.domain.repository;
 
-import noctem.userService.user.domain.entity.Search;
-
 import java.util.Set;
 
 public interface SearchRepository {
-    Boolean save(Search search);
+    Boolean save(Long userAccountId, String query);
 
-    Set<String> findAllByUserAccountId(Long id);
+    Set<String> findAllByUserAccountId(Long userAccountId);
 }

@@ -4,15 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class MenuInfoResServDto {
-    @NotBlank
+    @Min(1)
     private Long cartOrMyMenuId;
-    @NotBlank
+    @Min(1)
     private Long sizeId;
     @NotBlank
     private String menuName;
@@ -24,6 +25,6 @@ public class MenuInfoResServDto {
     private String temperature;
     @NotBlank
     private String size;
-    @NotBlank
+    @Min(0)
     private Integer totalPrice; // 옵션을 제외한 메뉴가격
 }
