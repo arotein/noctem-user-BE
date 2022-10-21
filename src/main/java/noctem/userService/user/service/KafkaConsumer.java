@@ -9,7 +9,10 @@ import noctem.userService.global.enumeration.Grade;
 import noctem.userService.user.domain.entity.UserAccount;
 import noctem.userService.user.domain.repository.UserAccountRepository;
 import noctem.userService.user.dto.request.IncreaseUserExpKafkaDto;
+import noctem.userService.user.dto.vo.SignUpVo;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @RequiredArgsConstructor
-public class FromStoreKafkaConsumer {
+public class KafkaConsumer {
     private final String STORE_TO_USER_GRADE_EXP_TOPIC = "store-to-user-grade-exp";
+    private final String SIGN_UP_EMAIL_TOPIC = "sign-up-email";
     private final UserAccountRepository userAccountRepository;
+    private final JavaMailSender mailSender;
 
     @KafkaListener(topics = STORE_TO_USER_GRADE_EXP_TOPIC)
     public void increaseUserExp(String userExpDtoAsJson) {
@@ -36,10 +41,29 @@ public class FromStoreKafkaConsumer {
                 // 등급업 푸시알림
             }
         } catch (JsonMappingException e) {
-            log.warn("Occurred JsonMappingException. [{}]", FromStoreKafkaConsumer.class.getSimpleName());
+            log.warn("Occurred JsonMappingException. [{}]", KafkaConsumer.class.getSimpleName());
         } catch (JsonProcessingException e) {
-            log.warn("Occurred JsonProcessingException. [{}]", FromStoreKafkaConsumer.class.getSimpleName());
+            log.warn("Occurred JsonProcessingException. [{}]", KafkaConsumer.class.getSimpleName());
         }
+    }
 
+    @KafkaListener(topics = SIGN_UP_EMAIL_TOPIC)
+    public void signUpEmail(String signUpVoJson) {
+        try {
+            SignUpVo signUpVo = AppConfig.objectMapper()
+                    .readValue(signUpVoJson, SignUpVo.class);
+
+            SimpleMailMessage email = new SimpleMailMessage();
+            email.setFrom("CafeNoctem@noctem.com");
+            email.setTo(signUpVo.getEmail());
+            email.setSubject("Cafe Noctem 회원가입을 축하드립니다.");
+            email.setText(String.format("%s님 Cafe Noctem 회원가입을 축하드립니다.", signUpVo.getNickname()));
+
+            mailSender.send(email);
+        } catch (JsonMappingException e) {
+            log.warn("Occurred JsonMappingException. [{}]", KafkaConsumer.class.getSimpleName());
+        } catch (JsonProcessingException e) {
+            log.warn("Occurred JsonProcessingException. [{}]", KafkaConsumer.class.getSimpleName());
+        }
     }
 }

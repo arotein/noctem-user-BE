@@ -1,7 +1,9 @@
 package noctem.userService.user.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import noctem.userService.AppConfig;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Grade;
 import noctem.userService.global.security.bean.ClientInfoLoader;
@@ -15,7 +17,9 @@ import noctem.userService.user.domain.repository.UserPrivacyRepository;
 import noctem.userService.user.dto.request.ChangeNicknameReqDto;
 import noctem.userService.user.dto.request.SignUpReqDto;
 import noctem.userService.user.dto.response.*;
+import noctem.userService.user.dto.vo.SignUpVo;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +32,11 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final String SIGN_UP_EMAIL_TOPIC = "sign-up-email";
     private final UserAccountRepository userAccountRepository;
     private final UserPrivacyRepository userPrivacyRepository;
     private final OptionalInfoRepository optionalInfoRepository;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final PasswordEncoder passwordEncoder;
     private final ClientInfoLoader clientInfoLoader;
 
@@ -67,6 +73,12 @@ public class UserServiceImpl implements UserService {
                 .linkToOptionalInfo(optionalInfo);
 
         userAccountRepository.save(userAccount);
+        try {
+            String signUpVoJson = AppConfig.objectMapper().writeValueAsString(new SignUpVo(dto.getNickname(), dto.getEmail()));
+            kafkaTemplate.send(SIGN_UP_EMAIL_TOPIC, signUpVoJson);
+        } catch (JsonProcessingException e) {
+            throw CommonException.builder().errorCode(2027).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         return true;
     }
 

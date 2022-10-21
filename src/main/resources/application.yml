@@ -47,6 +47,17 @@ spring:
   redis:
     host: ${REDIS_SERVER}
     port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 eureka:
   instance:
@@ -82,4 +93,3 @@ global:
     signer: ${NOCTEM_JWT_SIGNER}
   api:
     base-path: /api/${USER-SERVICE}
-  value: local-user
