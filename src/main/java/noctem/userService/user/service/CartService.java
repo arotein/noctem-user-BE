@@ -14,9 +14,11 @@ public interface CartService {
 
     Boolean addMenuToCart(AddCartReqDto dto);
 
-    Boolean changeMenuQty(Long sizeId, ChangeMenuQtyReqDto dto);
+    Boolean changeMenuQty(Long cartId, ChangeMenuQtyReqDto dto);
 
-    Boolean changeMenuOption(Long sizeId, List<ChangeMenuOptionReqDto> dtoList);
+    Boolean changeMenuOption(Long cartId, List<ChangeMenuOptionReqDto> dtoList);
 
-    Boolean delMenu(Long sizeId);
+    Boolean delMenu(Long cartId);
+
+    Boolean delAllMenu();
 }

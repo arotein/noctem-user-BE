@@ -57,7 +57,7 @@ public class CartServiceImpl implements CartService {
         } else {
             // 존재하지 않는 메뉴 -> 추가
             Cart cart = Cart.builder().sizeId(dto.getSizeId()).qty(dto.getQuantity()).build();
-            cart.linkToUserAccount(userAccountRepository.getById(clientInfoLoader.getUserAccountId()));
+            cart.linkToUserAccount(userAccountRepository.findById(clientInfoLoader.getUserAccountId()).get());
             dto.getPersonalOptionList().forEach(e ->
                     cart.linkToMyPersonalOption(MyPersonalOption.builder()
                             .personalOptionId(e.getOptionId())
@@ -93,6 +93,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public Boolean delMenu(Long cartId) {
         cartRepository.delete(identificationCart(cartId));
+        return true;
+    }
+
+    @Override
+    public Boolean delAllMenu() {
+        cartRepository.deleteAllCartByUserAccountId(clientInfoLoader.getUserAccountId());
         return true;
     }
 

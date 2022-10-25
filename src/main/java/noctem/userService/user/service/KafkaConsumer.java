@@ -54,7 +54,6 @@ public class KafkaConsumer {
                     .readValue(signUpVoJson, SignUpVo.class);
 
             SimpleMailMessage email = new SimpleMailMessage();
-            email.setFrom("CafeNoctem@noctem.com");
             email.setTo(signUpVo.getEmail());
             email.setSubject("Cafe Noctem 회원가입을 축하드립니다.");
             email.setText(String.format("%s님 Cafe Noctem 회원가입을 축하드립니다.", signUpVo.getNickname()));

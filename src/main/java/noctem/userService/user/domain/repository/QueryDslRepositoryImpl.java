@@ -6,7 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static noctem.userService.user.domain.entity.QCart.cart;
+import static noctem.userService.user.domain.entity.QMyPersonalOption.myPersonalOption;
 import static noctem.userService.user.domain.entity.QUserAccount.userAccount;
 
 @Repository
@@ -27,5 +30,20 @@ public class QueryDslRepositoryImpl implements QueryDslRepository {
                 .join(cart.userAccount, userAccount)
                 .where(userAccount.id.eq(userAccountId))
                 .fetchOne();
+    }
+
+    @Override
+    public void deleteAllCartByUserAccountId(Long userAccountId) {
+        List<Long> cartIdList = queryFactory.select(cart.id)
+                .from(cart)
+                .join(cart.userAccount, userAccount)
+                .where(userAccount.id.eq(userAccountId))
+                .fetch();
+        queryFactory.delete(myPersonalOption)
+                .where(myPersonalOption.cart.id.in(cartIdList))
+                .execute();
+        queryFactory.delete(cart)
+                .where(cart.id.in(cartIdList))
+                .execute();
     }
 }

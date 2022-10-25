@@ -65,4 +65,11 @@ public class CartController {
                 .data(cartService.delMenu(sizeId))
                 .build();
     }
+
+    @DeleteMapping("/all")
+    public CommonResponse delAllMenu() {
+        return CommonResponse.builder()
+                .data(cartService.delAllMenu())
+                .build();
+    }
 }

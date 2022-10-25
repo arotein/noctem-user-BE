@@ -65,11 +65,11 @@ public class UserAccount extends BaseEntity {
     private OptionalInfo optionalInfo;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MyMenu> myMenuList = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cart> cartList = new ArrayList<>();
 
     @Builder

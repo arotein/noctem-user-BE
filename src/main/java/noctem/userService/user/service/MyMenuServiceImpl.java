@@ -49,7 +49,7 @@ public class MyMenuServiceImpl implements MyMenuService {
         } else {
             // 존재하지 않는 메뉴 -> 추가
             MyMenu myMenu = MyMenu.builder().alias(dto.getAlias()).sizeId(dto.getSizeId()).build();
-            myMenu.linkToUserAccount(userAccountRepository.getById(clientInfoLoader.getUserAccountId()));
+            myMenu.linkToUserAccount(userAccountRepository.findById(clientInfoLoader.getUserAccountId()).get());
             dto.getPersonalOptionList().forEach(e ->
                     myMenu.linkToMyPersonalOption(MyPersonalOption.builder()
                             .personalOptionId(e.getOptionId())

@@ -5,15 +5,13 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long>, QueryDslRepository {
+    @Override
     @EntityGraph(attributePaths = {"myPersonalOptionList", "userAccount"})
-    List<Cart> findAllBySizeId(Long sizeId);
+    Optional<Cart> findById(Long cartId);
 
     @EntityGraph(attributePaths = {"myPersonalOptionList"})
     List<Cart> findAllByUserAccountId(Long userAccountId);
-
-    @Override
-    @EntityGraph(attributePaths = {"myPersonalOptionList", "userAccount"})
-    Cart getById(Long cartId);
 }
