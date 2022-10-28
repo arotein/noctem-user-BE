@@ -3,6 +3,7 @@ package noctem.userService.user.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import noctem.userService.global.common.BaseEntity;
+import noctem.userService.global.enumeration.CupType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ public class Cart extends BaseEntity {
     @Column(name = "cart_id")
     private Long id;
     private Long sizeId;
+    @Enumerated(EnumType.STRING)
+    private CupType cupType;
     private Integer qty;
 
     @JsonIgnore
@@ -29,8 +32,9 @@ public class Cart extends BaseEntity {
     private List<MyPersonalOption> myPersonalOptionList = new ArrayList<>();
 
     @Builder
-    public Cart(Long sizeId, Integer qty) {
+    public Cart(Long sizeId, CupType cupType, Integer qty) {
         this.sizeId = sizeId;
+        this.cupType = cupType;
         this.qty = qty;
     }
 
@@ -54,6 +58,11 @@ public class Cart extends BaseEntity {
 
     public Cart changeQty(Integer qty) {
         this.qty = qty;
+        return this;
+    }
+
+    public Cart changeCupTypeByString(String cupType) {
+        this.cupType = CupType.findByValue(cupType);
         return this;
     }
 

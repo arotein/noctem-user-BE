@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Amount;
+import noctem.userService.global.enumeration.CupType;
 import noctem.userService.global.security.bean.ClientInfoLoader;
 import noctem.userService.user.domain.entity.Cart;
 import noctem.userService.user.domain.entity.MyPersonalOption;
@@ -12,7 +13,7 @@ import noctem.userService.user.domain.repository.MyPersonalOptionRepository;
 import noctem.userService.user.domain.repository.UserAccountRepository;
 import noctem.userService.user.dto.MenuComparisonJsonDto;
 import noctem.userService.user.dto.request.AddCartReqDto;
-import noctem.userService.user.dto.request.ChangeMenuOptionReqDto;
+import noctem.userService.user.dto.request.ChangeCartMenuOptionsReqDto;
 import noctem.userService.user.dto.request.ChangeMenuQtyReqDto;
 import noctem.userService.user.dto.response.CartListResDto;
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,11 @@ public class CartServiceImpl implements CartService {
             cartMap.get(dtoJson).plusQty(dto.getQuantity());
         } else {
             // 존재하지 않는 메뉴 -> 추가
-            Cart cart = Cart.builder().sizeId(dto.getSizeId()).qty(dto.getQuantity()).build();
+            Cart cart = Cart.builder()
+                    .sizeId(dto.getSizeId())
+                    .qty(dto.getQuantity())
+                    .cupType(CupType.findByValue(dto.getCupType()))
+                    .build();
             cart.linkToUserAccount(userAccountRepository.findById(clientInfoLoader.getUserAccountId()).get());
             dto.getPersonalOptionList().forEach(e ->
                     cart.linkToMyPersonalOption(MyPersonalOption.builder()
@@ -76,10 +81,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Boolean changeMenuOption(Long cartId, List<ChangeMenuOptionReqDto> dtoList) {
+    public Boolean changeMenuOption(Long cartId, ChangeCartMenuOptionsReqDto dto) {
         Cart cart = identificationCart(cartId);
         myPersonalOptionRepository.deleteAll(cart.getMyPersonalOptionList());
-        dtoList.forEach(e ->
+        cart.changeCupTypeByString(dto.getCupType());
+        dto.getPersonalOptionList().forEach(e ->
                 cart.linkToMyPersonalOption(
                         MyPersonalOption.builder()
                                 .personalOptionId(e.getMyPersonalOptionId())

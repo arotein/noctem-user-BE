@@ -20,10 +20,12 @@ import java.util.List;
 @NoArgsConstructor
 public class MenuComparisonJsonDto {
     private Long sizeId;
+    private String cupType;
     private List<UserStaticDto.PersonalOptionReqDto> personalOptionList;
 
     public String addCartReqDtoToJson(AddCartReqDto dto) {
         this.sizeId = dto.getSizeId();
+        this.cupType = dto.getCupType();
         this.personalOptionList = dto.getPersonalOptionList();
         sortPersonalOptionList();
         return toJson();
@@ -31,6 +33,7 @@ public class MenuComparisonJsonDto {
 
     public String addMyMenuReqDtoToJson(AddMyMenuReqDto dto) {
         this.sizeId = dto.getSizeId();
+        this.cupType = dto.getCupType();
         this.personalOptionList = dto.getPersonalOptionList();
         sortPersonalOptionList();
         return toJson();
@@ -38,6 +41,7 @@ public class MenuComparisonJsonDto {
 
     public String cartAndOptionEntityToJson(Cart cart) {
         this.sizeId = cart.getSizeId();
+        this.cupType = cart.getCupType().getValue();
         this.personalOptionList = new ArrayList<>();
         cart.getMyPersonalOptionList()
                 .forEach(e -> this.personalOptionList.add(new UserStaticDto.PersonalOptionReqDto(e)));
@@ -47,6 +51,7 @@ public class MenuComparisonJsonDto {
 
     public String myMenuAndOptionEntityToJson(MyMenu myMenu) {
         this.sizeId = myMenu.getSizeId();
+        this.cupType = myMenu.getCupType().getValue();
         this.personalOptionList = new ArrayList<>();
         myMenu.getMyPersonalOptionList()
                 .forEach(e -> this.personalOptionList.add(new UserStaticDto.PersonalOptionReqDto(e)));

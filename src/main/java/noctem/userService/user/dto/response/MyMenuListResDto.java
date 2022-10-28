@@ -14,12 +14,14 @@ public class MyMenuListResDto {
     private Long myMenuId;
     private String alias;
     private Long sizeId;
+    private String cupType;
     private List<String> myPersonalOptionList;
 
     public MyMenuListResDto(MyMenu myMenu) {
         this.myMenuId = myMenu.getId();
         this.alias = myMenu.getAlias();
         this.sizeId = myMenu.getSizeId();
+        this.cupType = myMenu.getCupType().getValue();
         this.myPersonalOptionList = new ArrayList<>();
     }
 }

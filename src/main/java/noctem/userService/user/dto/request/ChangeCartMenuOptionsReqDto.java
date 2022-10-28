@@ -3,14 +3,13 @@ package noctem.userService.user.dto.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ChangeMenuOptionReqDto {
-    @Min(1)
-    private Long myPersonalOptionId;
+public class ChangeCartMenuOptionsReqDto {
     @NotBlank
-    private String amount;
+    private String cupType;
+    private List<ChangeMenuPersonalOptionReqDto> personalOptionList;
 }

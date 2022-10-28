@@ -1,8 +1,12 @@
 package noctem.userService.user.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import noctem.userService.global.common.BaseEntity;
+import noctem.userService.global.enumeration.CupType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,6 +26,8 @@ public class MyMenu extends BaseEntity {
     private Long id;
     private String alias;
     private Long sizeId;
+    @Enumerated(EnumType.STRING)
+    private CupType cupType;
     private Integer myMenuOrder;
 
     @JsonIgnore
@@ -34,9 +40,10 @@ public class MyMenu extends BaseEntity {
     private List<MyPersonalOption> myPersonalOptionList = new ArrayList<>();
 
     @Builder
-    public MyMenu(Long sizeId, String alias) {
+    public MyMenu(Long sizeId, String alias, CupType cupType) {
         this.sizeId = sizeId;
         this.alias = alias;
+        this.cupType = cupType;
         this.myMenuOrder = 0;
     }
 

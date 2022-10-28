@@ -15,5 +15,7 @@ public class AddMyMenuReqDto {
     private Long sizeId;
     @NotBlank
     private String alias;
+    @NotBlank
+    private String cupType;
     private List<UserStaticDto.PersonalOptionReqDto> personalOptionList;
 }

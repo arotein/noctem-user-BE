@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Amount;
+import noctem.userService.global.enumeration.CupType;
 import noctem.userService.global.security.bean.ClientInfoLoader;
 import noctem.userService.user.domain.entity.MyMenu;
 import noctem.userService.user.domain.entity.MyPersonalOption;
@@ -48,7 +49,11 @@ public class MyMenuServiceImpl implements MyMenuService {
             return false;
         } else {
             // 존재하지 않는 메뉴 -> 추가
-            MyMenu myMenu = MyMenu.builder().alias(dto.getAlias()).sizeId(dto.getSizeId()).build();
+            MyMenu myMenu = MyMenu.builder()
+                    .alias(dto.getAlias())
+                    .sizeId(dto.getSizeId())
+                    .cupType(CupType.findByValue(dto.getCupType()))
+                    .build();
             myMenu.linkToUserAccount(userAccountRepository.findById(clientInfoLoader.getUserAccountId()).get());
             dto.getPersonalOptionList().forEach(e ->
                     myMenu.linkToMyPersonalOption(MyPersonalOption.builder()

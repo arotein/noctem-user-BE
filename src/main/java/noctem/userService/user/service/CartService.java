@@ -1,7 +1,7 @@
 package noctem.userService.user.service;
 
 import noctem.userService.user.dto.request.AddCartReqDto;
-import noctem.userService.user.dto.request.ChangeMenuOptionReqDto;
+import noctem.userService.user.dto.request.ChangeCartMenuOptionsReqDto;
 import noctem.userService.user.dto.request.ChangeMenuQtyReqDto;
 import noctem.userService.user.dto.response.CartListResDto;
 
@@ -16,7 +16,7 @@ public interface CartService {
 
     Boolean changeMenuQty(Long cartId, ChangeMenuQtyReqDto dto);
 
-    Boolean changeMenuOption(Long cartId, List<ChangeMenuOptionReqDto> dtoList);
+    Boolean changeMenuOption(Long cartId, ChangeCartMenuOptionsReqDto dto);
 
     Boolean delMenu(Long cartId);
 

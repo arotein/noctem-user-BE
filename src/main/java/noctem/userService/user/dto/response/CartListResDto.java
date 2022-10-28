@@ -13,6 +13,7 @@ public class CartListResDto {
     private Integer index;
     private Long cartId;
     private Long sizeId;
+    private String cupType;
     private Integer qty;
     private List<String> myPersonalOptionList;
 
@@ -20,6 +21,7 @@ public class CartListResDto {
         this.cartId = cart.getId();
         this.sizeId = cart.getSizeId();
         this.qty = cart.getQty();
+        this.cupType = cart.getCupType().getValue();
         this.myPersonalOptionList = new ArrayList<>();
     }
 }
