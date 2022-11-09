@@ -54,9 +54,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
-    implementation "com.querydsl:querydsl-jpa:5.0.0"
-//    implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+    implementation "com.querydsl:querydsl-jpa:5.0.0"
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0"
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
