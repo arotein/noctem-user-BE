@@ -58,6 +58,22 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         return String.format("Bearer %s", JWT.getEncoder().encode(rawJwt, secretKey));
     }
 
+    public static String generateNewJwt(Long userAccountId, String nickname, String email, String role) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        HMACSigner secretKey = HMACSigner.newSHA256Signer(JWT_SIGNER);
+        JWT rawJwt = new JWT()
+                .setIssuer(JWT_ISSUER)
+                .addClaim(JWT_USER_ACCOUNT_ID, userAccountId)
+                .addClaim(JWT_NICKNAME, nickname)
+                .addClaim(JWT_EMAIL, email)
+                .addClaim(JWT_ROLE, role)
+                .addClaim(JWT_LOGIN_DTTM, simpleDateFormat.format(new Date()))
+                .setExpiration(ZonedDateTime.now(ZoneId.of("Asia/Seoul")).plusYears(1));
+        // 요청헤더 Authorization : Bearer <JWT>
+        return String.format("Bearer %s", JWT.getEncoder().encode(rawJwt, secretKey));
+    }
+
     public String getJwt() {
         return jwt;
     }

@@ -33,7 +33,7 @@ public interface UserService {
 
     UserPrivacyInfoResDto getPrivacyInfo();
 
-    Boolean changeNickname(ChangeNicknameReqDto dto);
+    ChangeNicknameResDto changeNickname(ChangeNicknameReqDto dto);
 
     GradeAndRemainingExpResDto getGradeAndRemainingExp();
 

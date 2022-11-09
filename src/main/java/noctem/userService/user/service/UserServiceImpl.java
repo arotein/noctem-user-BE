@@ -7,6 +7,7 @@ import noctem.userService.AppConfig;
 import noctem.userService.global.common.CommonException;
 import noctem.userService.global.enumeration.Grade;
 import noctem.userService.global.security.bean.ClientInfoLoader;
+import noctem.userService.global.security.token.JwtAuthenticationToken;
 import noctem.userService.user.domain.entity.OptionalInfo;
 import noctem.userService.user.domain.entity.RequiredInfo;
 import noctem.userService.user.domain.entity.UserAccount;
@@ -102,10 +103,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean changeNickname(ChangeNicknameReqDto dto) {
+    public ChangeNicknameResDto changeNickname(ChangeNicknameReqDto dto) {
         userAccountRepository.findById(clientInfoLoader.getUserAccountId()).get()
                 .changeNickname(dto.getNickname());
-        return true;
+        return new ChangeNicknameResDto(JwtAuthenticationToken.generateNewJwt(
+                clientInfoLoader.getUserAccountId(),
+                dto.getNickname(),
+                clientInfoLoader.getUserEmail(),
+                clientInfoLoader.getClientRole().toString()
+        ));
     }
 
     @Transactional(readOnly = true)
